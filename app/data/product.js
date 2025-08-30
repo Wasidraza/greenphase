@@ -1,0 +1,181 @@
+const products = {
+  "smart-home-charger": {
+    banner: "/banner1.webp",
+    title: "Smart Home Charger",
+    description:
+      "With Real-time monitoring, Scheduling, Plug in to Charge, Tap & Charge with RFID...",
+    price: "₹3,999",
+    cards: [
+      {
+        title: "Green Phase AC Home Charger",
+        features: "7.2 kW / 11 kW / 22 kW",
+        dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
+        img: "/hc.webp",
+        size: "large",
+        slug: "green-phase-home-charger-hc1",
+      },
+      {
+        title: "Green Phase AC Home Charger",
+        features: "7.2 kW / 11 kW / 22 kW",
+        dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
+        img: "/hc2.webp",
+        size: "small",
+        slug: "green-phase-home-charger-hc2",
+      },
+      {
+        title: "Green Phase AC Home Charger",
+        features: "7.2 kW / 11 kW / 22 kW",
+        dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
+        img: "/h3.webp",
+        size: "small",
+        slug: "green-phase-home-charger-hc3",
+      },
+      {
+        title: "Green Phase AC Home Charger",
+        features: "7.2 kW / 11 kW / 22 kW",
+        dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
+        img: "/h4.webp",
+        size: "small",
+        slug: "green-phase-home-charger-hc4",
+      },
+      {
+        title: "Green Phase AC Home Charger",
+        features: "7.2 kW / 11 kW / 22 kW",
+        dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
+        img: "/hc5.webp",
+        size: "small",
+        slug: "green-phase-home-charger-hc5",
+      },
+    ],
+
+    // Why Choose Section
+    whyChoose: [
+      { icon: "⚡", title: "High Speed", desc: "Fast charging up to 22kW" },
+      { icon: "🔒", title: "Secure", desc: "Safe with RFID authentication" },
+      { icon: "🌍", title: "Eco", desc: "Eco-friendly energy usage" },
+      { icon: "📱", title: "App Control", desc: "Control via mobile app" },
+    ],
+
+    // Gallery Images
+    gallery: ["/dc.webp", "/dc2.webp", "/dc1.webp", "/dc.webp"],
+
+    // Key Features
+    keyFeatures: [
+      "Power Options: 7.2 kW / 11 kW / 22 kW",
+      "Compact & Stylish Wall-Mount Design",
+      "Smart App Integration (Wi-Fi / Bluetooth)",
+      "RFID & Mobile App Authentication",
+      "Energy Efficient & BIS Certified",
+      "Overcurrent, Surge & Short-Circuit Protection",
+      "LED Indicators for Charging Status",
+    ],
+
+    // Technical Specifications
+    specifications: {
+      "Output Power": "7.2 kW / 11 kW / 22 kW",
+      "Input Voltage": "230V (Single Phase) / 400V (Three Phase)",
+      "Current Rating": "32A",
+      "Connector Type": "Type 2 (IEC 62196)",
+      Connectivity: "Wi-Fi / Bluetooth / OCPP",
+      Enclosure: "IP54 Weather-Proof",
+      Installation: "Wall-Mount / Pole-Mount",
+    },
+
+    // Applications
+    applications: [
+      "Residential Homes – Daily Overnight Charging",
+      "Apartments & Housing Societies",
+      "Workplace & Semi-Commercial Spaces",
+    ],
+
+    // Warranty & Support
+    warranty: [
+      "5 Years Comprehensive Warranty",
+      "24x7 Customer Support",
+      "Installation & After-Sales Service",
+    ],
+  },
+  "smart-dc-charger": {
+    banner: "/banner2.webp",
+    title: "Green Phase DC Fast Charger",
+    description: "High power DC fast charging with real-time monitoring...",
+    price: "₹7,499",
+    cards: [
+      {
+        title: "Green Phase DC Fast Charger",
+        features: " 30 kW to 120 kW",
+        desc: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
+        img: "/dc.webp",
+        size: "large",
+        slug:"fast-charger-1"
+      },
+      {
+        title: "Green Phase DC Fast Charger",
+        desc: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
+
+        features: " 30 kW to 120 kW",
+        img: "/dc1.webp",
+        size: "small",
+        slug:"fast-charger-1"
+      },
+      {
+        title: "Green Phase DC Fast Charger",
+        desc: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
+
+        features: " 30 kW to 120 kW",
+        img: "/dc2.webp",
+        size: "small",
+        slug:"fast-charger-1"
+      },
+    ],
+
+    // Why Choose Section
+    whyChoose: [
+      { icon: "⚡", title: "High Speed", desc: "Fast charging up to 22kW" },
+      { icon: "🔒", title: "Secure", desc: "Safe with RFID authentication" },
+      { icon: "🌍", title: "Eco", desc: "Eco-friendly energy usage" },
+      { icon: "📱", title: "App Control", desc: "Control via mobile app" },
+    ],
+
+    // Gallery Images
+    gallery: ["/dc.webp", "/dc2.webp", "/dc1.webp", "/dc.webp"],
+
+    // Key Features
+    keyFeatures: [
+      "Ultra-Fast Charging: 30 kW to 120 kW",
+      "Dual Gun Support: CCS2 / CHAdeMO / GB/T",
+      "Smart Payment: RFID, UPI, Mobile App",
+      "Cloud Connectivity: OCPP 1.6 / 2.0 support",
+      "Safety Certified: Overload, Surge & Temperature Protection",
+      "Rugged Outdoor Design: IP54 / IP65 enclosure",
+      "User-Friendly 7” or 10” Touchscreen Interface",
+    ],
+
+    // Technical Specifications
+    specifications: {
+      "Output Power": "30 kW / 60 kW / 120 kW (configurable)",
+      "Input Voltage": "200V – 1000V DC",
+      "Efficiency:": "≥ 95%",
+      "Connector Types": "CCS2 / CHAdeMO / GB/T",
+      "Cooling System": "3 Phase, 400V AC",
+      " Display": " 7” / 10” Touchscreen",
+      Communication: "Ethernet / 4G / Wi-Fi / OCPP",
+    },
+
+    // Applications
+    applications: [
+      "Public Charging Stations: Highways, Metro Cities, Parking Hubs",
+      "Fleet Operators: Electric Buses, Taxis, Logistics EVs",
+      "Commercial Spaces: Malls, Offices, Industrial Parks",
+    ],
+
+    // Warranty & Support
+    warranty: [
+      "5 Years Comprehensive Warranty",
+      "24x7 Customer Support",
+      "On-Site Service & Remote Monitoring",
+    ],
+  },
+};
+
+export default products;
