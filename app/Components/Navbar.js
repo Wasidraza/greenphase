@@ -2,25 +2,36 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import logo from "../../public/full-logo.jpeg";
-import { usePathname } from "next/navigation";
-
-import {
-  Menu,
-  X,
-  ChevronDown,
-  ChevronUp,
-  Linkedin,
-  Instagram,
-} from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, X, ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
+  const { user, setUser, logout } = useAuth();
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-    const pathname = usePathname();
+  const pathname = usePathname();
+  const router = useRouter();
+  const { cart } = useCart();
 
-  // Close dropdown when clicking outside
+  useEffect(() => {
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) {
+    setUser(JSON.parse(storedUser));
+  }
+}, [setUser]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    router.push("/login");
+  };
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -28,16 +39,19 @@ export default function Navbar() {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 text-lg bg-white shadow-lg lg:shadow-none">
-      <div className="max-w-[90%] mx-auto">
+    <nav className="fixed top-0 left-0 right-0 z-50 text-lg bg-white shadow">
+      <div className="max-w-full px-3 mx-auto">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/">
-            <Image src={logo} alt="Logo" width={100} height={50} />
+          <Link href="/" onClick={() => setMenuOpen(false)}>
+            <div className="relative w-32 h-16">
+              <Image src={logo} alt="Logo" fill className="object-contain" />
+            </div>
           </Link>
 
           {/* Desktop Links */}
@@ -45,7 +59,9 @@ export default function Navbar() {
             <Link
               href="/"
               className={`pb-1 ${
-                pathname === "/" ? "border-b-2 border-green-600 text-green-600" : ""
+                pathname === "/"
+                  ? "border-b-2 border-green-600 text-green-600"
+                  : ""
               }`}
             >
               Home
@@ -53,7 +69,9 @@ export default function Navbar() {
             <Link
               href="/about"
               className={`pb-1 ${
-                pathname === "/about" ? "border-b-2 border-green-600 text-green-600" : ""
+                pathname === "/about"
+                  ? "border-b-2 border-green-600 text-green-600"
+                  : ""
               }`}
             >
               About
@@ -64,7 +82,7 @@ export default function Navbar() {
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className={`flex items-center pb-1 ${
-                  pathname.startsWith("/products")
+                  pathname.startsWith("/product")
                     ? "border-b-2 border-green-600 text-green-600"
                     : ""
                 }`}
@@ -77,25 +95,24 @@ export default function Navbar() {
                 )}
               </button>
               {dropdownOpen && (
-                <div className="absolute left-0 w-48 bg-white rounded-md shadow-lg top-10">
+                <div
+                  ref={dropdownRef}
+                  className="absolute left-0 w-48 bg-white rounded-md shadow-lg top-10"
+                >
                   <Link
                     href="/product/smart-home-charger"
+                    onClick={() => setDropdownOpen(false)}
                     className="block px-4 py-2 text-[15px] hover:bg-gray-100"
                   >
-                 Smart Home Charger
+                    Smart Home Charger
                   </Link>
                   <Link
                     href="/product/smart-dc-charger"
+                    onClick={() => setDropdownOpen(false)}
                     className="block px-4 py-2 text-[15px] hover:bg-gray-100"
                   >
-                   Smart DC Charger
+                    Smart DC Charger
                   </Link>
-                  {/* <Link
-                    href="/product/smart-car"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Product 3
-                  </Link> */}
                 </div>
               )}
             </div>
@@ -112,10 +129,39 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Social Icons */}
-          <div className="hidden space-x-4 md:flex">
-            <Linkedin className="text-green-600 hover:cursor-pointer" />
-            <Instagram className="text-green-600 hover:cursor-pointer" />
+          {/* ✅ User Section Desktop */}
+          <div className="items-center hidden space-x-4 md:flex">
+            {user ? (
+              <>
+                <Link
+                  href="/product/smart-home-charger"
+                  className="px-4 py-2 text-white bg-black rounded-lg"
+                >
+                  Shop
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 text-green-600 border border-green-600 rounded-lg"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/signup"
+                  className="px-4 py-2 text-white bg-black rounded-lg"
+                >
+                  Signup
+                </Link>
+                <Link
+                  href="/login"
+                  className="px-4 py-2 text-green-600 border border-green-600 rounded-lg"
+                >
+                  Login
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -127,68 +173,110 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* ✅ Mobile Links */}
       {menuOpen && (
-        <div className="bg-white shadow-md md:hidden">
-          <Link href="/" className="block px-4 py-2 hover:bg-gray-100">
+        <div className="flex flex-col p-4 space-y-2 bg-white shadow-md md:hidden">
+          <Link
+            href="/"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-2 rounded-md hover:bg-gray-100"
+          >
             Home
           </Link>
-          <Link href="/about" className="block px-4 py-2 hover:bg-gray-100">
+          <Link
+            href="/about"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-2 rounded-md hover:bg-gray-100"
+          >
             About
           </Link>
 
-          {/* Dropdown for Mobile */}
-          <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center justify-between w-full px-4 py-2 hover:bg-gray-100"
-          >
-            Products{" "}
-            {dropdownOpen ? (
-              <ChevronUp size={16} />
-            ) : (
-              <ChevronDown size={16} />
+          {/* Dropdown Mobile */}
+          <div className="relative w-full">
+            <button
+              onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
+              className="flex items-center justify-between w-full px-4 py-2 rounded-md hover:bg-gray-100"
+            >
+              Products
+              {mobileDropdownOpen ? (
+                <ChevronUp size={16} />
+              ) : (
+                <ChevronDown size={16} />
+              )}
+            </button>
+
+            {mobileDropdownOpen && (
+              <div className="flex flex-col mt-1 ml-4 space-y-1 bg-white rounded-md shadow">
+                <Link
+                  href="/product/smart-home-charger"
+                  onClick={() => {
+                    setMobileDropdownOpen(false);
+                    setMenuOpen(false);
+                  }}
+                  className="block px-3 py-2 text-sm rounded-md hover:bg-gray-100"
+                >
+                  Smart Home Charger
+                </Link>
+                <Link
+                  href="/product/smart-dc-charger"
+                  onClick={() => {
+                    setMobileDropdownOpen(false);
+                    setMenuOpen(false);
+                  }}
+                  className="block px-3 py-2 text-sm rounded-md hover:bg-gray-100"
+                >
+                  Smart DC Charger
+                </Link>
+              </div>
             )}
-          </button>
-          {dropdownOpen && (
-            <div className="pl-6">
-              <Link
-                href="/products/1"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Product 1
-              </Link>
-              <Link
-                href="/products/2"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Product 2
-              </Link>
-              <Link
-                href="/products/3"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Product 3
-              </Link>
-              <Link
-                href="/products/4"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Product 4
-              </Link>
-            </div>
-          )}
+          </div>
 
           <Link
             href="/contact"
-            className="block px-4 py-2 hover:bg-gray-100"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-2 rounded-md hover:bg-gray-100"
           >
             Contact
           </Link>
 
-          <div className="flex px-4 py-3 space-x-4 border-t">
-            <Linkedin className="text-green-600 hover:cursor-pointer" />
-            <Instagram className="text-green-600 hover:cursor-pointer" />
-          </div>
+          {/* ✅ User Section Mobile */}
+          {user ? (
+            <>
+              <Link
+                href="/dashboard"
+                onClick={() => setMenuOpen(false)}
+                className="block px-4 py-2 text-white bg-black rounded-lg"
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setMenuOpen(false);
+                }}
+                className="block px-4 py-2 text-green-600 border border-green-600 rounded-lg"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/signup"
+                onClick={() => setMenuOpen(false)}
+                className="block px-4 py-2 text-white bg-green-600 rounded-lg"
+              >
+                Signup
+              </Link>
+              <Link
+                href="/login"
+                onClick={() => setMenuOpen(false)}
+                className="block px-4 py-2 text-green-600 border border-green-600 rounded-lg"
+              >
+                Login
+              </Link>
+            </>
+          )}
         </div>
       )}
     </nav>

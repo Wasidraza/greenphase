@@ -42,6 +42,9 @@ nav{
   background-color: var(--heading);
   font-weight: 500;
 }
+button{
+  cursor:pointer;
+}
 /* responsive */
 @media (max-width: 768px) {
   h1 {

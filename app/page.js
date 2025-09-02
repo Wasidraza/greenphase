@@ -20,7 +20,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true }}
-            className="flex-1 text-center lg:text-left"
+            className="flex-1 order-1 text-center lg:text-left"
           >
             <h1 className="text-2xl leading-tight">CHARGE SMART LIVE GREEN</h1>
             <p className="mb-6 text-lg text-gray-600">

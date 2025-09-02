@@ -30,7 +30,7 @@ export default function ProductCard() {
   return (
     <section className="px-4 py-1 mx-auto mt-10 max-w-7xl">
       <h2 className="pb-5 text-center">Our Products</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-[200px] md:auto-rows-[350px]">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-[400px] md:auto-rows-[350px]">
         {features.map((item, i) => (
           <div
             key={i}
@@ -53,7 +53,7 @@ export default function ProductCard() {
               <p className="mb-4 text-sm">{item.desc}</p>
               <Link
                 href={`/product/${item.slug}`}
-                className="flex items-center gap-2 px-8 py-2 text-lg font-medium text-white bg-green-500 rounded-lg lg:w-48"
+                className="flex items-center w-48 gap-2 px-8 py-2 text-lg font-medium text-white bg-green-500 rounded-lg"
               >
                 Shop Now <ArrowUpRight />
               </Link>

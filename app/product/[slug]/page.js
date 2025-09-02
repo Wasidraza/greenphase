@@ -78,9 +78,9 @@ export default async function ProductPage({ params }) {
       </div>
 
       {/* Gallry component */}
-      {/* <Gallery images={product.gallery} /> */}
+      <Gallery images={product.gallery} />
 
-      {/* Download Brochure */}
+
       <div className="mt-10 mb-10 text-center">
         <Link
           href="/brochure.pdf"

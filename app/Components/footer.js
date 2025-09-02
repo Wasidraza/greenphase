@@ -16,8 +16,8 @@ export default function Footer() {
               <Image src={logo} alt="Logo" width={50} height={50} />
             </h3>
             <p className="text-gray-400">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus,
-              culpa!
+              At Green Phase, our vision is to redefine mobility through
+              sustainability and innovation.
             </p>
           </div>
 
@@ -72,13 +72,13 @@ export default function Footer() {
           <div className="space-y-2">
             <h3 className="mb-4 text-xl font-bold">Contact Us</h3>
             <p className="flex gap-2 text-gray-400">
-              <MapPin /> New Delhi, India
+              <MapPin /> kalindi Kunj, Okhla ,New Delhi -110025
             </p>
             <p className="flex gap-2 text-gray-400">
-              <Phone /> +91 9876543210
+              <Phone /> +91 7827488393
             </p>
             <p className="flex gap-2 text-gray-400">
-              <Mail /> greenphase@gmail.com
+              <Mail /> sale@greenphase.in
             </p>
           </div>
         </div>

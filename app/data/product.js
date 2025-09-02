@@ -7,6 +7,7 @@ const products = {
     price: "₹3,999",
     cards: [
       {
+        id:1,
         title: "Green Phase AC Home Charger",
         features: "7.2 kW / 11 kW / 22 kW",
         dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
@@ -15,6 +16,7 @@ const products = {
         slug: "green-phase-home-charger-hc1",
       },
       {
+        id:2,
         title: "Green Phase AC Home Charger",
         features: "7.2 kW / 11 kW / 22 kW",
         dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
@@ -23,6 +25,7 @@ const products = {
         slug: "green-phase-home-charger-hc2",
       },
       {
+        id:3,
         title: "Green Phase AC Home Charger",
         features: "7.2 kW / 11 kW / 22 kW",
         dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
@@ -31,6 +34,7 @@ const products = {
         slug: "green-phase-home-charger-hc3",
       },
       {
+        id:4,
         title: "Green Phase AC Home Charger",
         features: "7.2 kW / 11 kW / 22 kW",
         dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
@@ -39,6 +43,7 @@ const products = {
         slug: "green-phase-home-charger-hc4",
       },
       {
+        id:5,
         title: "Green Phase AC Home Charger",
         features: "7.2 kW / 11 kW / 22 kW",
         dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
@@ -50,14 +55,20 @@ const products = {
 
     // Why Choose Section
     whyChoose: [
-      { icon: "⚡", title: "High Speed", desc: "Fast charging up to 22kW" },
-      { icon: "🔒", title: "Secure", desc: "Safe with RFID authentication" },
-      { icon: "🌍", title: "Eco", desc: "Eco-friendly energy usage" },
-      { icon: "📱", title: "App Control", desc: "Control via mobile app" },
+      { icon: "⚡", desc: "Fast charging up to 22kW" },
+      { icon: "🔒", desc: "Safe with RFID authentication" },
+      { icon: "🌍", desc: "Eco-friendly energy usage" },
+      { icon: "📱", desc: "7 days replacement" },
+      { icon: "🔧", desc: "Installation Available" },
+      { icon: "📦", desc: "Free delivery" },
+      { icon: "🛡️", desc: "1 Year warranty" },
+      { icon: "🔌", desc: " Compatible with all EV models" },
+
+
     ],
 
     // Gallery Images
-    gallery: ["/dc.webp", "/dc2.webp", "/dc1.webp", "/dc.webp"],
+    gallery: ["/gallery/2.webp", "/gallery/3.webp", "/gallery/5.webp", "/gallery/6.webp"],
 
     // Key Features
     keyFeatures: [
@@ -99,20 +110,18 @@ const products = {
     banner: "/banner2.webp",
     title: "Green Phase DC Fast Charger",
     description: "High power DC fast charging with real-time monitoring...",
-    price: "₹7,499",
     cards: [
       {
         title: "Green Phase DC Fast Charger",
         features: " 30 kW to 120 kW",
-        desc: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
+        dec: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
         img: "/dc.webp",
         size: "large",
         slug:"fast-charger-1"
       },
       {
         title: "Green Phase DC Fast Charger",
-        desc: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
-
+        dec: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
         features: " 30 kW to 120 kW",
         img: "/dc1.webp",
         size: "small",
@@ -120,7 +129,7 @@ const products = {
       },
       {
         title: "Green Phase DC Fast Charger",
-        desc: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
+        dec: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
 
         features: " 30 kW to 120 kW",
         img: "/dc2.webp",

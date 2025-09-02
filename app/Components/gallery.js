@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Gallery({ images }) {
   const [current, setCurrent] = useState(0);
@@ -14,7 +15,7 @@ export default function Gallery({ images }) {
   return (
     <div className="relative max-w-4xl p-6 mx-auto">
       {/* Main Image */}
-      <div className="relative h-[400px] w-full rounded-xl overflow-hidden shadow-lg">
+      <div className="relative h-[500px] w-full rounded-xl overflow-hidden shadow-lg">
         <Image
           src={images[current]}
           alt={`Gallery image ${current + 1}`}
@@ -26,15 +27,15 @@ export default function Gallery({ images }) {
       {/* Navigation */}
       <button
         onClick={prevSlide}
-        className="absolute px-3 py-2 text-white -translate-y-1/2 rounded-full left-4 top-1/2 bg-black/50"
+        className="absolute px-2 py-2 text-white -translate-y-1/2 bg-green-500 rounded-full left-4 top-5/12"
       >
-        ‹
+    <ChevronLeft size={40}/>
       </button>
       <button
         onClick={nextSlide}
-        className="absolute px-3 py-2 text-white -translate-y-1/2 rounded-full right-4 top-1/2 bg-black/50"
+        className="absolute px-2 py-2 text-white -translate-y-1/2 bg-green-500 rounded-full right-4 top-5/12"
       >
-        ›
+      <ChevronRight size={40}/>
       </button>
 
       {/* Thumbnails */}
