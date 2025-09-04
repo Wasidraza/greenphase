@@ -41,8 +41,7 @@ export default function Checkout() {
         <div className="flex items-center justify-between">
           <div>
             <p className="font-medium">
-              {title}
-            {` - ${productColor} `}
+              {title} <span className="text-gray-600">({productColor})</span>
             </p>
             <p className="text-sm text-gray-500">{power}</p>
           </div>

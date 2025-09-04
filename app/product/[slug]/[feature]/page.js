@@ -34,26 +34,16 @@ export default function FeaturePage({ params }) {
   const handleBuyNow = () => {
     const user = localStorage.getItem("user");
 
-    if (isDCCharger) {
-      router.push("/contact");
-      return;
-    }
-
     const checkoutUrl = `/checkout?title=${encodeURIComponent(
       selectedCard.title
     )}&price=${priceOptions[selectedKW]}&power=${encodeURIComponent(
       selectedKW
-    )}`;
+    )}&color=${encodeURIComponent(selectedCard.productColor)}`;
 
     if (!user) {
       router.push(`/signup?redirect=${encodeURIComponent(checkoutUrl)}`);
-      return;
-    }
-
-    if (isHomeCharger) {
-      router.push(checkoutUrl);
     } else {
-      alert("Unknown product type!");
+      router.push(checkoutUrl);
     }
   };
 
