@@ -7,6 +7,7 @@ export default function Checkout() {
   const router = useRouter();
 
   const title = params.get("title") || "No product";
+    const productColor = params.get("color") || "Standard";
   const price = params.get("price") || "0";
   const power = params.get("power") || "-";
 
@@ -39,7 +40,10 @@ export default function Checkout() {
         <h3 className="mb-3 text-xl font-bold">Your Product</h3>
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-medium">{title}</p>
+            <p className="font-medium">
+              {title}
+            {` - ${productColor} `}
+            </p>
             <p className="text-sm text-gray-500">{power}</p>
           </div>
           <p className="font-bold text-green-600">
