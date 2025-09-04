@@ -1,14 +1,11 @@
 "use client";
-import { Suspense } from "react";
+
+import { useSearchParams } from "next/navigation";
 import Signup from "../Components/Signup";
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
+export default function SignupClient() {
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/product/smart-home-charger";
 
-export default function SignupPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Signup />
-    </Suspense>
-  );
+  return <Signup redirect={redirect} />;
 }

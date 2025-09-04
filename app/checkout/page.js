@@ -1,15 +1,10 @@
-"use client";
-
 import { Suspense } from "react";
-import Checkout from "../Components/Checkout";
+import CheckoutClient from "./CheckoutClient";
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-
-export default function CheckoutPage() {
+export default function Page() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Checkout />
+    <Suspense fallback={<div>Loading checkout...</div>}>
+      <CheckoutClient />
     </Suspense>
   );
 }

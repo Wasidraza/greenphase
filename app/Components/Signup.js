@@ -123,28 +123,20 @@
 
 
 "use client";
+
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
 
-export default function Signup() {
+export default function Signup({ redirect = "/product/smart-home-charger" }) {
   const { login } = useAuth();
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const redirect = searchParams.get("redirect") || "/product/smart-home-charger";
+  const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -160,19 +152,14 @@ export default function Signup() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      const userData = {
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-      };
-
+      const userData = { name: form.name, email: form.email, phone: form.phone };
       localStorage.setItem("user", JSON.stringify(userData));
       login(userData);
 
       toast.success("✅ Signup successful!");
       router.push(redirect);
-    } catch (error) {
-      toast.error("❌ " + error.message);
+    } catch (err) {
+      toast.error("❌ " + err.message);
     } finally {
       setLoading(false);
     }
@@ -181,14 +168,12 @@ export default function Signup() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md p-6 bg-white shadow-lg rounded-2xl">
-        <h2 className="mb-4 text-2xl font-bold text-green-600">
-          Create Account
-        </h2>
+        <h2 className="mb-4 text-2xl font-bold text-green-600">Create Account</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name" required className="w-full p-2 border rounded-lg" />
-          <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email Address" required className="w-full p-2 border rounded-lg" />
-          <input type="text" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone Number" required className="w-full p-2 border rounded-lg" />
-          <input type="password" name="password" value={form.password} onChange={handleChange} placeholder="Password" required className="w-full p-2 border rounded-lg" />
+          <input name="name" value={form.name} onChange={handleChange} placeholder="Full Name" className="w-full p-2 border rounded-lg" required />
+          <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email Address" className="w-full p-2 border rounded-lg" required />
+          <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone Number" className="w-full p-2 border rounded-lg" required />
+          <input type="password" name="password" value={form.password} onChange={handleChange} placeholder="Password" className="w-full p-2 border rounded-lg" required />
           <button type="submit" disabled={loading} className="w-full p-2 text-white transition bg-green-600 rounded-lg hover:bg-green-700">
             {loading ? "Signing up..." : "Sign Up"}
           </button>
@@ -197,3 +182,4 @@ export default function Signup() {
     </div>
   );
 }
+
