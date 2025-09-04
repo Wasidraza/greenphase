@@ -7,7 +7,7 @@ export default function Checkout() {
   const router = useRouter();
 
   const title = params.get("title") || "No product";
-    const productColor = params.get("color") || "Standard";
+  const productColor = params.get("color") || "Standard";
   const price = params.get("price") || "0";
   const power = params.get("power") || "-";
 
