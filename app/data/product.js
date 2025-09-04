@@ -7,49 +7,79 @@ const products = {
     price: "₹3,999",
     cards: [
       {
-        id:1,
+        id: 1,
         title: "Green Phase AC Home Charger",
         features: "7.2 kW / 11 kW / 22 kW",
         dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
         img: "/hc.webp",
+        productColor: "red",
         size: "large",
         slug: "green-phase-home-charger-hc1",
+        priceOptions: {
+          "7.2 kW": 25000,
+          "11 kW": 32000,
+          "22 kW": 45000,
+        },
       },
       {
-        id:2,
+        id: 2,
         title: "Green Phase AC Home Charger",
         features: "7.2 kW / 11 kW / 22 kW",
         dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
         img: "/hc2.webp",
+        productColor: "black",
         size: "small",
         slug: "green-phase-home-charger-hc2",
+        priceOptions: {
+          "7.2 kW": 25000,
+          "11 kW": 32000,
+          "22 kW": 45000,
+        },
       },
       {
-        id:3,
+        id: 3,
         title: "Green Phase AC Home Charger",
         features: "7.2 kW / 11 kW / 22 kW",
         dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
         img: "/h3.webp",
+        productColor: "green",
         size: "small",
         slug: "green-phase-home-charger-hc3",
+        priceOptions: {
+          "7.2 kW": 25000,
+          "11 kW": 32000,
+          "22 kW": 45000,
+        },
       },
       {
-        id:4,
+        id: 4,
         title: "Green Phase AC Home Charger",
         features: "7.2 kW / 11 kW / 22 kW",
         dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
         img: "/h4.webp",
+        productColor: "blue",
         size: "small",
         slug: "green-phase-home-charger-hc4",
+        priceOptions: {
+          "7.2 kW": 25000,
+          "11 kW": 32000,
+          "22 kW": 45000,
+        },
       },
       {
-        id:5,
+        id: 5,
         title: "Green Phase AC Home Charger",
         features: "7.2 kW / 11 kW / 22 kW",
         dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
         img: "/hc5.webp",
+        productColor: "yellow",
         size: "small",
         slug: "green-phase-home-charger-hc5",
+        priceOptions: {
+          "7.2 kW": 25000,
+          "11 kW": 32000,
+          "22 kW": 45000,
+        },
       },
     ],
 
@@ -58,17 +88,20 @@ const products = {
       { icon: "⚡", desc: "Fast charging up to 22kW" },
       { icon: "🔒", desc: "Safe with RFID authentication" },
       { icon: "🌍", desc: "Eco-friendly energy usage" },
-      { icon: "📱", desc: "7 days replacement" },
+      { icon: "📱", desc: "10 days replacement" },
       { icon: "🔧", desc: "Installation Available" },
       { icon: "📦", desc: "Free delivery" },
-      { icon: "🛡️", desc: "1 Year warranty" },
+      { icon: "🛡️", desc: "2 Year warranty" },
       { icon: "🔌", desc: " Compatible with all EV models" },
-
-
     ],
 
     // Gallery Images
-    gallery: ["/gallery/2.webp", "/gallery/3.webp", "/gallery/5.webp", "/gallery/6.webp"],
+    gallery: [
+      "/gallery/2.webp",
+      "/gallery/3.webp",
+      "/gallery/5.webp",
+      "/gallery/6.webp",
+    ],
 
     // Key Features
     keyFeatures: [
@@ -101,7 +134,7 @@ const products = {
 
     // Warranty & Support
     warranty: [
-      "5 Years Comprehensive Warranty",
+      "2 Years Comprehensive Warranty",
       "24x7 Customer Support",
       "Installation & After-Sales Service",
     ],
@@ -113,28 +146,45 @@ const products = {
     cards: [
       {
         title: "Green Phase DC Fast Charger",
-        features: " 30 kW to 120 kW",
+        features: " 30 kW , 60 KW, 120 kW",
         dec: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
         img: "/dc.webp",
         size: "large",
-        slug:"fast-charger-1"
+        slug: "fast-charger-1",
+        // ✅ priceOptions add kiya
+        priceOptions: {
+          "30 kW": null,
+          "60 kW": null,
+          "120 kW": null,
+        },
       },
       {
         title: "Green Phase DC Fast Charger",
         dec: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
-        features: " 30 kW to 120 kW",
+        features: " 30 kW , 60 KW, 120 kW",
         img: "/dc1.webp",
         size: "small",
-        slug:"fast-charger-1"
+        slug: "fast-charger-1",
+        // ✅ priceOptions add kiya
+        priceOptions: {
+          "30 kW": null,
+          "60 kW": null,
+          "120 kW": null,
+        },
       },
       {
         title: "Green Phase DC Fast Charger",
         dec: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
-
-        features: " 30 kW to 120 kW",
+        features: " 30 kW , 60 KW, 120 kW",
         img: "/dc2.webp",
         size: "small",
-        slug:"fast-charger-1"
+        slug: "fast-charger-1",
+        // ✅ priceOptions add kiya
+        priceOptions: {
+          "30 kW": null,
+          "60 kW": null,
+          "120 kW": null,
+        },
       },
     ],
 
@@ -180,7 +230,7 @@ const products = {
 
     // Warranty & Support
     warranty: [
-      "5 Years Comprehensive Warranty",
+      "2 Years Comprehensive Warranty",
       "24x7 Customer Support",
       "On-Site Service & Remote Monitoring",
     ],

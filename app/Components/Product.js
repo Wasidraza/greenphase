@@ -28,7 +28,7 @@ const features = [
 ];
 export default function ProductCard() {
   return (
-    <section className="px-4 py-1 mx-auto mt-10 max-w-7xl">
+    <section className="px-4 py-1 mx-auto mt-5 max-w-7xl">
       <h2 className="pb-5 text-center">Our Products</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-[400px] md:auto-rows-[350px]">
         {features.map((item, i) => (

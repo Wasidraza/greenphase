@@ -52,6 +52,10 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+      {/* Product */}
+      <Product />
+      {/* Process Steps */}
+      <ProcessSteps />
       {/* About Us Section */}
       <section className="bg-white">
         <div className="flex flex-col-reverse items-center justify-between gap-12 px-6 mx-auto mt-10 lg:px-20 lg:flex-row">
@@ -96,12 +100,6 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-      <ProcessSteps />
-      {/* Product */}
-      <Product />
-
-      {/* Process Steps */}
-
       <Mission />
     </>
   );

@@ -23,13 +23,7 @@ export default function FeaturePage({ params }) {
   if (!selectedCard) {
     return <div className="p-10 text-red-500">Feature not found 🚨</div>;
   }
-
-  const priceOptions = {
-    "7.2 kW": 25000,
-    "11 kW": 32000,
-    "22 kW": 45000,
-  };
-
+  const priceOptions = selectedCard.priceOptions || {};
   const isHomeCharger = selectedCard.title
     .toLowerCase()
     .includes("home charger");
@@ -39,6 +33,11 @@ export default function FeaturePage({ params }) {
 
   const handleBuyNow = () => {
     const user = localStorage.getItem("user");
+
+    if (isDCCharger) {
+      router.push("/contact");
+      return;
+    }
 
     const checkoutUrl = `/checkout?title=${encodeURIComponent(
       selectedCard.title
@@ -51,9 +50,7 @@ export default function FeaturePage({ params }) {
       return;
     }
 
-    if (isDCCharger) {
-      router.push("/contact");
-    } else if (isHomeCharger) {
+    if (isHomeCharger) {
       router.push(checkoutUrl);
     } else {
       alert("Unknown product type!");
@@ -75,8 +72,11 @@ export default function FeaturePage({ params }) {
         </div>
 
         <div className="flex flex-col justify-center p-6 bg-white border shadow-md rounded-2xl">
-          <h3 className="mb-2 text-3xl font-bold">{selectedCard.title}</h3>
+          <h3 className="mb-2 text-2xl font-bold capitalize">
+            {selectedCard.title} ({selectedCard.productColor})
+          </h3>
           <p className="mb-4 text-gray-600">{selectedCard.dec}</p>
+
           <div className="flex gap-3 mb-6">
             {Object.keys(priceOptions).map((kw) => (
               <button
@@ -84,7 +84,7 @@ export default function FeaturePage({ params }) {
                 onClick={() => setSelectedKW(kw)}
                 className={`px-5 py-2 rounded-lg border font-medium transition ${
                   selectedKW === kw
-                    ? "bg-green-600 text-white border-green-600 shadow-md"
+                    ? "bg-black text-white border-black shadow-md"
                     : "bg-gray-100 border-green-600 text-green-600 hover:bg-green-50"
                 }`}
               >
@@ -94,15 +94,15 @@ export default function FeaturePage({ params }) {
           </div>
 
           {isHomeCharger && (
-            <div className="mb-6 text-4xl font-extrabold tracking-wide text-green-700">
-              ₹{priceOptions[selectedKW].toLocaleString()}
+            <div className="mb-6 text-2xl font-extrabold tracking-wide text-black">
+              ₹{priceOptions[selectedKW].toLocaleString()} (inc of taxes)
             </div>
           )}
 
           <div className="flex gap-4">
             <button
               onClick={handleBuyNow}
-              className="px-6 py-3 font-semibold text-green-600 transition border border-green-600 hover:text-white rounded-xl hover:bg-green-600"
+              className="px-6 py-2 font-semibold text-green-600 transition border border-green-600 hover:text-white rounded-xl hover:bg-green-600"
             >
               {isDCCharger ? "Contact Us" : "Buy it now"}
             </button>
