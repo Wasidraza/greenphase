@@ -1,15 +1,12 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import Checkout from "../Components/Checkout";
 
-export default function CheckoutClient() {
-  const params = useSearchParams();
-
-  const title = params.get("title") || "No product";
-  const productColor = params.get("color") || "Standard";
-  const price = params.get("price") || "0";
-  const power = params.get("power") || "-";
+export default function CheckoutPage({ searchParams }) {
+  const title = searchParams?.title || "No product";
+  const productColor = searchParams?.color || "Standard";
+  const price = searchParams?.price || "0";
+  const power = searchParams?.power || "-";
 
   return (
     <Checkout
