@@ -156,10 +156,10 @@ export default function Signup({ redirect = "/product/smart-home-charger" }) {
       localStorage.setItem("user", JSON.stringify(userData));
       login(userData);
 
-      toast.success("✅ Signup successful!");
+      toast.success("Signup successful!");
       router.push(redirect);
     } catch (err) {
-      toast.error("❌ " + err.message);
+      toast.error("Invalid User" + err.message);
     } finally {
       setLoading(false);
     }
