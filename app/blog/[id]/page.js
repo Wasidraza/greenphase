@@ -1,7 +1,7 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import blogs from "../../data/blogs";
+import blogs from "../../data/blog";
 import Image from "next/image";
 
 export default function BlogDetail({ params }) {
