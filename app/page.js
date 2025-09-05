@@ -22,7 +22,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="flex-1 order-1 text-center lg:text-left"
           >
-            <h1 className="text-2xl leading-tight">CHARGE SMART LIVE GREEN</h1>
+            <h1 className="text-xl leading-tight">CHARGE SMART LIVE GREEN</h1>
             <p className="mb-6 text-lg text-gray-600">
               We are pioneering the e-mobility revolution by building high-speed
               public charging infrastructure across India.

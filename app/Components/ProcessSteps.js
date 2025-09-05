@@ -50,11 +50,11 @@ const steps = [
 
 export default function ProcessSteps() {
   return (
-    <section className="lg:max-w-[90%] mx-auto px-6 py-16 lg:mt-10">
-      <h2 className="mb-12 text-3xl font-bold text-center">
+    <section className="lg:max-w-[90%] w-full mx-auto px-6 py-16 lg:mt-10">
+      <h3 className="mb-12 text-[25px] lg:text-5xl text-center">
         End-to-End{" "}
         <span className="text-green-600">EV Charger Solution</span> Provider
-      </h2>
+      </h3>
 
       {/* Steps Wrapper */}
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

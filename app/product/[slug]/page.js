@@ -24,7 +24,7 @@ export default async function ProductPage({ params }) {
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-white bg-black/40">
           <h2 className="font-bold">{product.title}</h2>
-          <p className="max-w-2xl mt-2">{product.description}</p>
+          <p className="max-w-2xl mt-2 text-sm lg:text-[16px]">{product.description}</p>
         </div>
       </div>
 
@@ -49,10 +49,7 @@ export default async function ProductPage({ params }) {
             <div className="p-6">
               <h3 className="mb-2 text-lg font-semibold">{card.title}</h3>
               <p>{card.features}</p>
-              <div className="flex items-center justify-between mt-4">
-                <p className="text-lg font-bold text-gray-800">
-                  {product.price}
-                </p>
+              <div className="flex items-center justify-end mt-4">
                 <Link href={`/product/${slug}/${card.slug}`} className="px-5 py-2 text-white bg-green-500 rounded-lg hover:bg-green-700">View Details</Link>
               </div>
             </div>
