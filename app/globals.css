@@ -8,6 +8,7 @@
   --subHeading: #111111;
   --paragraph: #000000;
 }
+
 body{
   font-family: var(--font-markpro3);
 }

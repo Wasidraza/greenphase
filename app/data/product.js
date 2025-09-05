@@ -14,11 +14,11 @@ const products = {
         img: "/hc.webp",
         productColor: "red",
         size: "large",
-        slug: "green-phase-home-charger-hc1",
+        slug: "hc1",
         priceOptions: {
-          "7.2 kW": 25000,
-          "11 kW": 32000,
-          "22 kW": 45000,
+          "7.2 kW": { price: 25000, mrp: 40000 },
+          "11 kW": { price: 32000, mrp: 48000 },
+          "22 kW": { price: 45000, mrp: 60000 },
         },
       },
       {
@@ -29,11 +29,11 @@ const products = {
         img: "/hc2.webp",
         productColor: "black",
         size: "small",
-        slug: "green-phase-home-charger-hc2",
+        slug: "hc2",
         priceOptions: {
-          "7.2 kW": 25000,
-          "11 kW": 32000,
-          "22 kW": 45000,
+          "7.2 kW": { price: 25000, mrp: 40000 },
+          "11 kW": { price: 32000, mrp: 48000 },
+          "22 kW": { price: 45000, mrp: 60000 },
         },
       },
       {
@@ -44,11 +44,11 @@ const products = {
         img: "/h3.webp",
         productColor: "green",
         size: "small",
-        slug: "green-phase-home-charger-hc3",
+        slug: "hc3",
         priceOptions: {
-          "7.2 kW": 25000,
-          "11 kW": 32000,
-          "22 kW": 45000,
+          "7.2 kW": { price: 25000, mrp: 40000 },
+          "11 kW": { price: 32000, mrp: 48000 },
+          "22 kW": { price: 45000, mrp: 60000 },
         },
       },
       {
@@ -59,11 +59,11 @@ const products = {
         img: "/h4.webp",
         productColor: "blue",
         size: "small",
-        slug: "green-phase-home-charger-hc4",
+        slug: "hc4",
         priceOptions: {
-          "7.2 kW": 25000,
-          "11 kW": 32000,
-          "22 kW": 45000,
+          "7.2 kW": { price: 25000, mrp: 40000 },
+          "11 kW": { price: 32000, mrp: 48000 },
+          "22 kW": { price: 45000, mrp: 60000 },
         },
       },
       {
@@ -76,9 +76,9 @@ const products = {
         size: "small",
         slug: "green-phase-home-charger-hc5",
         priceOptions: {
-          "7.2 kW": 25000,
-          "11 kW": 32000,
-          "22 kW": 45000,
+          "7.2 kW": { price: 25000, mrp: 40000 },
+          "11 kW": { price: 32000, mrp: 48000 },
+          "22 kW": { price: 45000, mrp: 60000 },
         },
       },
     ],
@@ -150,7 +150,7 @@ const products = {
         dec: "The Green Phase DC Fast Charger is a high-powered, future-ready solution designed for public charging stations, fleet operators, and highway installations. It delivers ultra-fast charging within minutes and ensures a smart, connected experience through OCPP cloud integration.",
         img: "/dc.webp",
         size: "large",
-        slug: "fast-charger-1",
+        slug: "DC1",
         // ✅ priceOptions add kiya
         priceOptions: {
           "30 kW": null,
@@ -164,7 +164,7 @@ const products = {
         features: " 30 kW , 60 KW, 120 kW",
         img: "/dc1.webp",
         size: "small",
-        slug: "fast-charger-1",
+        slug: "DC2",
         // ✅ priceOptions add kiya
         priceOptions: {
           "30 kW": null,
@@ -178,7 +178,7 @@ const products = {
         features: " 30 kW , 60 KW, 120 kW",
         img: "/dc2.webp",
         size: "small",
-        slug: "fast-charger-1",
+        slug: "DC3",
         // ✅ priceOptions add kiya
         priceOptions: {
           "30 kW": null,

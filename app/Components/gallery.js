@@ -15,7 +15,7 @@ export default function Gallery({ images }) {
   return (
     <div className="relative max-w-4xl p-6 mx-auto">
       {/* Main Image */}
-      <div className="relative h-[500px] w-full rounded-xl overflow-hidden shadow-lg">
+      <div className="relative h-[300px] lg:h-[500px] w-full rounded-xl overflow-hidden shadow-lg">
         <Image
           src={images[current]}
           alt={`Gallery image ${current + 1}`}

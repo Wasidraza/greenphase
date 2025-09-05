@@ -2,6 +2,7 @@
 
 import Checkout from "../Components/Checkout";
 
+
 export default function CheckoutPage({ searchParams }) {
   const title = searchParams?.title || "No product";
   const productColor = searchParams?.color || "Standard";

@@ -46,8 +46,9 @@ export default function WeServe() {
   return (
     <section className="px-6 py-5">
       <div className="mx-auto max-w-7xl">
+        {/* Heading */}
         <div className="mb-12 text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+          <h2 className="text-3xl font-extrabold text-green-600 sm:text-4xl">
             We Serve
           </h2>
           <p className="max-w-2xl mx-auto mt-2 text-gray-600">
@@ -56,6 +57,7 @@ export default function WeServe() {
           </p>
         </div>
 
+        {/* Cards */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((it, idx) => (
             <motion.article
@@ -67,14 +69,15 @@ export default function WeServe() {
               viewport={{ once: true }}
               className={`relative p-6 rounded-2xl shadow-lg text-black bg-gradient-to-br ${it.gradient}`}
             >
-              <div className="flex items-start gap-4">
-    
+              <div className="flex flex-col items-start gap-4 sm:flex-row">
+                {/* Icon */}
                 <div className="flex items-center justify-center flex-shrink-0 rounded-lg shadow w-14 h-14 bg-white/20">
                   {it.icon}
                 </div>
 
+                {/* Text */}
                 <div>
-                  <h3 className="text-[20px] font-semibold">{it.title}</h3>
+                  <h3 className="text-lg font-semibold">{it.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-black/90">
                     {it.desc}
                   </p>

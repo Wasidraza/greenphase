@@ -34,11 +34,15 @@ export default function FeaturePage({ params }) {
   const handleBuyNow = () => {
     const user = localStorage.getItem("user");
 
+    const selectedPriceData = priceOptions[selectedKW]; 
+
     const checkoutUrl = `/checkout?title=${encodeURIComponent(
       selectedCard.title
-    )}&price=${priceOptions[selectedKW]}&power=${encodeURIComponent(
-      selectedKW
-    )}&color=${encodeURIComponent(selectedCard.productColor)}`;
+    )}&price=${selectedPriceData.price}&mrp=${
+      selectedPriceData.mrp
+    }&power=${encodeURIComponent(selectedKW)}&color=${encodeURIComponent(
+      selectedCard.productColor
+    )}`;
 
     if (!user) {
       router.push(`/signup?redirect=${encodeURIComponent(checkoutUrl)}`);
@@ -46,12 +50,13 @@ export default function FeaturePage({ params }) {
       router.push(checkoutUrl);
     }
   };
-
   return (
-    <div className="p-6 mt-16 space-y-16 lg:mt-14 md:p-12">
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
-        <div>
-          <div className="w-full h-[400px] relative rounded-xl overflow-hidden shadow-md">
+    <div className="p-4 mt-16 space-y-12 lg:mt-14 md:p-12">
+      {/* Product Image + Details */}
+      <div className="grid grid-cols-1 gap-8 md:gap-10 md:grid-cols-2">
+        {/* Image */}
+        <div className="w-full">
+          <div className="relative w-full h-64 sm:h-80 md:h-[400px] rounded-xl overflow-hidden shadow-md">
             <Image
               src={selectedCard.img}
               alt={selectedCard.title}
@@ -61,18 +66,22 @@ export default function FeaturePage({ params }) {
           </div>
         </div>
 
-        <div className="flex flex-col justify-center p-6 bg-white border shadow-md rounded-2xl">
-          <h3 className="mb-2 text-2xl font-bold capitalize">
+        {/* Details */}
+        <div className="flex flex-col justify-center p-4 bg-white border shadow-md sm:p-6 rounded-2xl">
+          <h3 className="mb-2 text-xl font-bold capitalize sm:text-2xl">
             {selectedCard.title} ({selectedCard.productColor})
           </h3>
-          <p className="mb-4 text-gray-600">{selectedCard.dec}</p>
+          <p className="mb-4 text-sm text-gray-600 sm:text-base">
+            {selectedCard.dec}
+          </p>
 
-          <div className="flex gap-3 mb-6">
+          {/* Power Options */}
+          <div className="flex flex-wrap gap-2 mb-6 sm:gap-3">
             {Object.keys(priceOptions).map((kw) => (
               <button
                 key={kw}
                 onClick={() => setSelectedKW(kw)}
-                className={`px-5 py-2 rounded-lg border font-medium transition ${
+                className={`px-3 py-1 sm:px-5 sm:py-2 text-sm sm:text-base rounded-lg border font-medium transition ${
                   selectedKW === kw
                     ? "bg-black text-white border-black shadow-md"
                     : "bg-gray-100 border-green-600 text-green-600 hover:bg-green-50"
@@ -83,16 +92,31 @@ export default function FeaturePage({ params }) {
             ))}
           </div>
 
-          {isHomeCharger && (
-            <div className="mb-6 text-2xl font-extrabold tracking-wide text-black">
+          {/* Price */}
+          {/* {isHomeCharger && (
+            <div className="mb-6 text-lg font-extrabold tracking-wide text-black sm:text-2xl">
               ₹{priceOptions[selectedKW].toLocaleString()} (inc of taxes)
+            </div>
+          )} */}
+
+          {isHomeCharger && (
+            <div className="mb-6">
+              <div className="text-lg font-extrabold tracking-wide text-black sm:text-2xl">
+                ₹{priceOptions[selectedKW]?.price.toLocaleString("en-IN")}{" "}
+                <span className="text-sm font-normal">(inc of taxes)</span>
+              </div>
+              <div className="text-base text-gray-900 line-through sm:text-xl">
+                M.R.P. - ₹
+                {priceOptions[selectedKW]?.mrp.toLocaleString("en-IN")}
+              </div>
             </div>
           )}
 
-          <div className="flex gap-4">
+          {/* Buy Now / Contact */}
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
             <button
               onClick={handleBuyNow}
-              className="px-6 py-2 font-semibold text-green-600 transition border border-green-600 hover:text-white rounded-xl hover:bg-green-600"
+              className="px-4 py-2 font-semibold text-green-600 transition border border-green-600 sm:px-6 hover:text-white rounded-xl hover:bg-green-600"
             >
               {isDCCharger ? "Contact Us" : "Buy it now"}
             </button>
@@ -100,53 +124,59 @@ export default function FeaturePage({ params }) {
         </div>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2">
-        <section className="p-6 bg-white border shadow rounded-2xl">
-          <h3 className="flex items-center gap-2 mb-6 text-2xl font-bold text-green-700">
+      {/* Features + Applications */}
+      <div className="grid gap-6 md:gap-8 md:grid-cols-2">
+        <section className="p-4 bg-white border shadow sm:p-6 rounded-2xl">
+          <h3 className="flex items-center gap-2 mb-4 text-xl font-bold text-green-700 sm:mb-6 sm:text-2xl">
             Key Features
           </h3>
-          <ul className="space-y-4">
+          <ul className="space-y-3 sm:space-y-4">
             {product.keyFeatures.map((feature, idx) => (
               <li
                 key={idx}
                 className="flex items-start gap-3 p-3 transition rounded-lg bg-gray-50 hover:shadow-md"
               >
-                <span className="text-xl text-green-600">
+                <span className="text-lg text-green-600 sm:text-xl">
                   <Key />
                 </span>
-                <span className="text-gray-700">{feature}</span>
+                <span className="text-sm text-gray-700 sm:text-base">
+                  {feature}
+                </span>
               </li>
             ))}
           </ul>
         </section>
 
-        <section className="p-6 bg-white border shadow rounded-2xl">
-          <h3 className="flex items-center gap-2 mb-6 text-2xl font-bold text-green-700">
+        <section className="p-4 bg-white border shadow sm:p-6 rounded-2xl">
+          <h3 className="flex items-center gap-2 mb-4 text-xl font-bold text-green-700 sm:mb-6 sm:text-2xl">
             Applications
           </h3>
-          <ul className="space-y-4">
+          <ul className="space-y-3 sm:space-y-4">
             {product.applications.map((app, idx) => (
               <li
                 key={idx}
                 className="flex items-start gap-3 p-3 transition rounded-lg bg-gray-50 hover:shadow-md"
               >
-                <span className="text-xl text-green-600">
+                <span className="text-lg text-green-600 sm:text-xl">
                   <ClipboardClock />
                 </span>
-                <span className="text-gray-700">{app}</span>
+                <span className="text-sm text-gray-700 sm:text-base">
+                  {app}
+                </span>
               </li>
             ))}
           </ul>
         </section>
       </div>
 
-      <div className="grid gap-10 md:grid-cols-2">
-        <section className="p-6 bg-white border shadow rounded-2xl">
-          <h3 className="flex items-center gap-2 mb-6 text-2xl font-bold text-[#31B345]">
+      {/* Specs + Warranty */}
+      <div className="grid gap-6 md:gap-10 md:grid-cols-2">
+        <section className="p-4 bg-white border shadow sm:p-6 rounded-2xl">
+          <h3 className="flex items-center gap-2 mb-4 sm:mb-6 text-xl sm:text-2xl font-bold text-[#31B345]">
             Technical Specifications
           </h3>
           <div className="overflow-x-auto">
-            <table className="w-full overflow-hidden border border-gray-200 rounded-lg">
+            <table className="w-full text-sm border border-gray-200 rounded-lg sm:text-base">
               <tbody>
                 {Object.entries(product.specifications).map(
                   ([key, value], idx) => (
@@ -156,10 +186,10 @@ export default function FeaturePage({ params }) {
                         idx % 2 === 0 ? "bg-gray-50" : "bg-white"
                       }`}
                     >
-                      <td className="w-1/3 p-4 font-medium text-gray-700">
+                      <td className="w-1/3 p-2 font-medium text-gray-700 sm:p-4">
                         {key}
                       </td>
-                      <td className="p-4 text-gray-600">{value}</td>
+                      <td className="p-2 text-gray-600 sm:p-4">{value}</td>
                     </tr>
                   )
                 )}
@@ -168,37 +198,42 @@ export default function FeaturePage({ params }) {
           </div>
         </section>
 
-        <section className="p-6 bg-white border shadow rounded-2xl">
-          <h3 className="flex items-center gap-2 mb-6 text-2xl font-bold text-[#31B345]">
+        <section className="p-4 bg-white border shadow sm:p-6 rounded-2xl">
+          <h3 className="flex items-center gap-2 mb-4 sm:mb-6 text-xl sm:text-2xl font-bold text-[#31B345]">
             Warranty & Support
           </h3>
-          <ul className="space-y-4">
+          <ul className="space-y-3 sm:space-y-4">
             {product.warranty.map((item, idx) => (
               <li
                 key={idx}
                 className="flex items-start gap-3 p-3 transition rounded-lg bg-gray-50 hover:shadow-md"
               >
-                <span className="text-xl text-green-600">
+                <span className="text-lg text-green-600 sm:text-xl">
                   <CircleCheckBig />
                 </span>
-                <span className="text-gray-700">{item}</span>
+                <span className="text-sm text-gray-700 sm:text-base">
+                  {item}
+                </span>
               </li>
             ))}
           </ul>
         </section>
       </div>
 
+      {/* Why Choose Us */}
       <div className="text-center">
-        <h2 className="mb-6 text-3xl font-bold">Why Choose Us</h2>
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+        <h2 className="mb-6 text-2xl font-bold sm:text-3xl">Why Choose Us</h2>
+        <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
           {product.whyChoose.map((item, idx) => (
             <div
               key={idx}
-              className="flex flex-col items-center p-4 bg-gray-50 rounded-xl"
+              className="flex flex-col items-center p-3 sm:p-4 bg-gray-50 rounded-xl"
             >
-              <span className="text-4xl">{item.icon}</span>
-              <h3 className="mt-2 font-semibold">{item.title}</h3>
-              <p className="text-sm text-gray-600">{item.desc}</p>
+              <span className="text-3xl sm:text-4xl">{item.icon}</span>
+              <h3 className="mt-2 text-sm font-semibold sm:text-base">
+                {item.title}
+              </h3>
+              <p className="text-xs text-gray-600 sm:text-sm">{item.desc}</p>
             </div>
           ))}
         </div>

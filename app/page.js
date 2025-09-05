@@ -13,8 +13,8 @@ export default function Home() {
     <>
       {/* Hero Section */}
       <section className="bg-white">
-        <div className="flex flex-col-reverse items-center justify-between gap-12 px-6 py-16 mx-auto lg:px-20 lg:flex-row">
-          {/* Left Side (Text) */}
+        <div className="flex flex-col items-center justify-between gap-12 px-6 py-16 mx-auto mt-10 lg:px-20 lg:flex-row">
+          {/* Text Section */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -28,20 +28,20 @@ export default function Home() {
               public charging infrastructure across India.
             </p>
             <Link
-              href="/order"
+              href="/product/smart-home-charger"
               className="flex gap-2 w-44 lg:mx-0 mx-auto hover:bg-green-700 px-6 py-3 font-semibold text-white transition rounded-full bg-[#000000]"
             >
               Order Now <ArrowRight />
             </Link>
           </motion.div>
 
-          {/* Right Side (Image) */}
+          {/* Image Section */}
           <motion.div
             initial={{ opacity: 0, x: 100 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true }}
-            className="flex justify-end flex-1 order-2"
+            className="flex justify-center flex-1 order-2 lg:justify-end"
           >
             <Image
               src={heroImg}
@@ -52,6 +52,7 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
       {/* Product */}
       <Product />
       {/* Process Steps */}

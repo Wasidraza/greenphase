@@ -15,7 +15,7 @@ export default async function ProductPage({ params }) {
   return (
     <div>
       {/* Hero Banner */}
-      <div className="relative h-[600px] w-full max-w-[96%] mx-auto pt-20">
+      <div className="relative h-[300px] w-full max-w-[96%] lg:h-[700px] mx-auto pt-20">
         <Image
           src={product.banner}
           alt={product.title}
@@ -23,7 +23,7 @@ export default async function ProductPage({ params }) {
           className="object-cover rounded-lg"
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-white bg-black/40">
-          <h1 className="font-bold">{product.title}</h1>
+          <h2 className="font-bold">{product.title}</h2>
           <p className="max-w-2xl mt-2">{product.description}</p>
         </div>
       </div>
