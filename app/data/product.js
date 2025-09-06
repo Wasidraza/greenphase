@@ -87,7 +87,7 @@ const products = {
         features: "7.2 kW / 11 kW / 22 kW",
         dec: "The Green Phase AC Home Charger is designed for residential and semi-commercial use, supporting outputs from 7.2 kW to 22 kW. Compact, safe, and user-friendly, it ensures reliable overnight charging and is ideal for daily EV users.",
         img: "/charger.jpeg",
-        productColor: "yellow",
+        productColor: "Compact Black",
         size: "small",
         slug: "hc6",
         priceOptions: {

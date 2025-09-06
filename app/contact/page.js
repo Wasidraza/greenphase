@@ -109,7 +109,7 @@ export default function ContactPage() {
             <p className="text-sm text-gray-300 sm:text-base">
               Whether you are interested in working together on a new EV
               charging project, have a question/comment, interested in career
-              opportunities at ChargeZone, or just want to drop us a line, we’d
+              opportunities at Green Phase, or just want to drop us a line, we’d
               love to hear from you.
             </p>
 
