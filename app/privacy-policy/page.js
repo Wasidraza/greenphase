@@ -7,9 +7,9 @@ function page() {
         <h3 className="pb-3 text-3xl text-slate-900">Privacy Policy</h3>
         <p className="pb-2">
           Introduction This Privacy Policy describes how and its affiliates
-          (collectively 'GREEN PHASE ENTERPRISES' , we, our, us) collect, use,
-          share, protect or otherwise process your information/ personal data
-          through our website www.greenphase.in (hereinafter referred to as
+          { ` (collectively 'GREEN PHASE ENTERPRISES', we, our, us)`} collect,
+          use, share, protect or otherwise process your information/ personal
+          data through our website www.greenphase.in (hereinafter referred to as
           Platform). Please note that you may be able to browse certain sections
           of the Platform without registering with us.We do not offer any
           product/service under this Platform outside India and your personal

@@ -19,10 +19,10 @@ function page() {
           related mobile site and mobile application (hereinafter 3 referred to
           as “Platform”). The Platform is owned by GREEN PHASE a company
           incorporated under the Companies Act, 1956 with its registered office
-          at okhla , New Delhi , 110025. (hereinafter referred to as "Platform
-          Owner", “we”, “us”, “our”). Your use of the Platform and services and
-          tools are governed by the following terms and conditions ("Terms of
-          Use") as applicable to the Platform including the applicable policies
+          at okhla , New Delhi , 110025. {`(hereinafter referred to as "Platform
+          Owner", “we”, “us”, “our”)`}. Your use of the Platform and services and
+          tools are governed by the following terms and conditions {`("Terms of
+          Use")`} as applicable to the Platform including the applicable policies
           which are incorporated herein by way of reference. If You transact on
           the Platform, You shall be subject to the policies that are applicable
           to the Platform for such transaction. By mere use of the Platform, You
@@ -30,7 +30,7 @@ function page() {
           conditions including the policies constitute Your binding obligations,
           with Platform Owner. These Terms of Use relate to your use of our
           website, goods (as applicable) or services (as applicable)
-          (collectively, “Services”).{" "}
+          (collectively, “Services”).
         </p>
         <p className="pb-2">
           Any terms and conditions proposed by You which are in addition to or
@@ -39,7 +39,7 @@ function page() {
           can be modified at any time without assigning any reason. It is your
           responsibility to periodically review these Terms of Use to stay
           informed of updates. For the purpose of these Terms of Use, wherever
-          the context so requires "you", “your” or "user" shall mean any natural
+       {`the context so requires "you", "your" or "user" shall mean any natural`}
           or legal person who has agreed to become a user/buyer on the Platform.
           ACCESSING, BROWSING OR OTHERWISE USING THE PLATFORM INDICATES YOUR
           AGREEMENT TO ALL THE TERMS AND CONDITIONS UNDER THESE TERMS OF USE, SO
