@@ -61,8 +61,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/return-policy" className="hover:text-white">
-                  Return Policy
+                <Link href="/terms-conditions" className="hover:text-white">
+                  Terms & Conditions
                 </Link>
               </li>
             </ul>
@@ -87,7 +87,7 @@ export default function Footer() {
           © {new Date().getFullYear()} greenphase. All rights reserved.
         </div>
       </footer>
-      <Chat/>
+      <Chat />
     </>
   );
 }

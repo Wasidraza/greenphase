@@ -20,11 +20,11 @@ export default function Navbar() {
   const { cart } = useCart();
 
   useEffect(() => {
-  const storedUser = localStorage.getItem("user");
-  if (storedUser) {
-    setUser(JSON.parse(storedUser));
-  }
-}, [setUser]);
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, [setUser]);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -39,8 +39,7 @@ export default function Navbar() {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -116,7 +115,16 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-
+            <Link
+              href="/blog"
+              className={`pb-1 ${
+                pathname === "/blog"
+                  ? "border-b-2 border-green-600 text-green-600"
+                  : ""
+              }`}
+            >
+              Blog
+            </Link>
             <Link
               href="/contact"
               className={`pb-1 ${

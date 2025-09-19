@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function BlogPage() {
   return (
-    <div className="px-4 py-12 mx-auto max-w-7xl">
+    <div className="px-4 pt-24 pb-16 mx-auto max-w-7xl">
       <h1 className="mb-10 text-4xl font-bold text-center">Latest Blogs</h1>
 
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
