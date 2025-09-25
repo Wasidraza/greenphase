@@ -128,6 +128,7 @@ export default function Signup({
 
   const { login } = useAuth();
   const router = useRouter();
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -142,6 +143,7 @@ export default function Signup({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const res = await fetch("/api/signup", {
         method: "POST",
