@@ -1,10 +1,11 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const OrderSchema = new mongoose.Schema({
   merchantOrderId: { type: String, required: true, unique: true },
-  phonepeOrderId: { type: String }, 
+  phonepeOrderId: { type: String },
   productTitle: { type: String, required: true },
-  amount: { type: Number, required: true }, 
+  productColor: { type: String },
+  amount: { type: Number, required: true },
   customer: {
     firstName: String,
     lastName: String,
@@ -15,9 +16,13 @@ const OrderSchema = new mongoose.Schema({
     state: String,
     pincode: String,
   },
-  status: { type: String, enum: ['PENDING', 'SUCCESS', 'FAILED'], default: 'PENDING' },
+  status: {
+    type: String,
+    enum: ["PENDING", "SUCCESS", "FAILED"],
+    default: "PENDING",
+  },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date },
 });
 
-export default mongoose.models.Order || mongoose.model('Order', OrderSchema);
+export default mongoose.models.Order || mongoose.model("Order", OrderSchema);

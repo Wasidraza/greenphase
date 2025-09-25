@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Navbar from "./Navbar";
 import Footer from "./footer";
 
@@ -10,7 +10,7 @@ export default function Checkout() {
   const searchParams = useSearchParams();
 
   const title = searchParams.get("title") || "No product";
-  const color = searchParams.get("color") || "Standard";
+  const color = searchParams.get("color") || "Standard"; // 👈 yahi productColor hoga
   const power = searchParams.get("power") || "-";
   const price = searchParams.get("price") || "0";
 
@@ -31,16 +31,13 @@ export default function Checkout() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const payload = {
-      //   amountRupees: price,
-      //   productTitle: title,
-      //   form,
-      // };
       const payload = {
         amountRupees: Number(price),
         productTitle: title,
+        productColor: color, // 👈 yahan fix kiya
         form,
       };
+
       console.log("📤 Sending payload:", payload);
 
       const res = await fetch("/api/phonepe/create-payment", {
@@ -48,11 +45,11 @@ export default function Checkout() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+
       const data = await res.json();
       if (!res.ok) {
         throw new Error((data && data.error) || "Payment init failed");
       }
-
       const redirectUrl =
         data?.phonepeResponse?.redirectUrl ||
         data?.phonepeResponse?.redirect_url ||
@@ -66,6 +63,7 @@ export default function Checkout() {
         router.push(`/order-status?merchantOrderId=${data.merchantOrderId}`);
         return;
       }
+
       window.location.href = redirectUrl;
     } catch (err) {
       console.error("pay error", err);
