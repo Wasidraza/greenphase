@@ -24,9 +24,29 @@ export async function POST(req) {
       { status: 200 }
     );
   } catch (err) {
-    console.error("❌ Error saving contact:", err);
+    console.error("Error saving contact:", err);
     return NextResponse.json(
       { success: false, error: "Server error" },
+      { status: 500 }
+    );
+  }
+}
+
+
+export async function GET() {
+  try {
+    await connectDB();
+
+    const contacts = await Contact.find().sort({ createdAt: -1 }); // newest first
+
+    return NextResponse.json(
+      { success: true, contacts },
+      { status: 200 }
+    );
+  } catch (err) {
+    console.error("GET /api/contact error:", err);
+    return NextResponse.json(
+      { success: false, error: "Server error while fetching contacts" },
       { status: 500 }
     );
   }

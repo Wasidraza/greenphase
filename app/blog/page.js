@@ -2,11 +2,16 @@
 import blogs from "../data/blog";
 import Link from "next/link";
 import Image from "next/image";
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/footer";
 
 export default function BlogPage() {
   return (
+ <>
+ <Navbar/>
+
     <div className="px-4 pt-24 pb-16 mx-auto max-w-7xl">
-      <h1 className="mb-10 text-4xl font-bold text-center">Latest Blogs</h1>
+      <h2 className="mb-10 text-4xl font-bold text-center">Latest Blogs</h2>
 
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {blogs.map((blog) => (
@@ -47,5 +52,7 @@ export default function BlogPage() {
         ))}
       </div>
     </div>
+ <Footer/>
+ </>
   );
 }

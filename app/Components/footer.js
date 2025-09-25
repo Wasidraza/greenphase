@@ -36,7 +36,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/products" className="hover:text-white">
+                <Link href="/product/smart-home-charger" className="hover:text-white">
                   Products
                 </Link>
               </li>

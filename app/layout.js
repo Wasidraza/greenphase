@@ -41,10 +41,8 @@ export default function RootLayout({ children }) {
       >
        <LenisProvider>
           <CartProvider>
-            <AuthProvider>   {/* ✅ Yaha wrap kar diya */}
-              <Navbar />
+            <AuthProvider>   
               {children}
-              <Footer />
             </AuthProvider>
           </CartProvider>
         </LenisProvider>

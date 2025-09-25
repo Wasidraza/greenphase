@@ -7,10 +7,13 @@ import ProcessSteps from "./Components/ProcessSteps";
 import Mission from "./Components/Mission";
 import { motion } from "framer-motion";
 import Product from "./Components/Product";
+import Navbar from "./Components/Navbar";
+import Footer from "./Components/footer";
 
 export default function Home() {
   return (
     <>
+    <Navbar/>
       {/* Hero Section */}
       <section className="bg-white">
         <div className="flex flex-col items-center justify-between gap-12 px-6 py-16 mx-auto mt-10 lg:px-20 lg:flex-row">
@@ -102,6 +105,7 @@ export default function Home() {
         </div>
       </section>
       <Mission />
+      <Footer/>
     </>
   );
 }

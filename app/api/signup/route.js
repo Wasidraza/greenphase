@@ -48,3 +48,24 @@ export async function POST(req) {
     );
   }
 }
+
+
+// GET request - fetch all users
+export async function GET() {
+  try {
+    await connectDB();
+
+    const users = await User.find().sort({ createdAt: -1 }).select("-password"); // hide passwords
+
+    return NextResponse.json(
+      { success: true, users },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Signup GET API error:", error);
+    return NextResponse.json(
+      { success: false, message: "Server error", error: error.message },
+      { status: 500 }
+    );
+  }
+}

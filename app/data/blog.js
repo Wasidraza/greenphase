@@ -72,13 +72,10 @@ const blogs = [
     excerpt:
       "Charging EVs with renewable energy is the key to building a truly sustainable future.",
     content: `
-<h2>AC Home Charger vs. DC Public Charger: What’s the Difference?</h2>
-
 <p>As electric vehicles (EVs) grow in popularity, one of the biggest questions for new owners is: Where and how should I charge my EV? While you can charge at home or at public charging stations, the main difference lies in the type of charging—AC (Alternating Current) Home Chargers and DC (Direct Current) Public Chargers.</p>
 
 <p>Let’s break down the difference between the two.</p>
 
-<hr />
 
 <h3>1. Power Source & Conversion</h3>
 <ul>
@@ -86,7 +83,6 @@ const blogs = [
   <li><strong>DC Public Charger:</strong> Directly supplies DC power to the EV battery. The conversion is handled by the charging station itself, which is why DC chargers can deliver much higher charging speeds.</li>
 </ul>
 
-<hr />
 
 <h3>2. Charging Speed</h3>
 <ul>
@@ -106,7 +102,6 @@ const blogs = [
   </li>
 </ul>
 
-<hr />
 
 <h3>3. Installation & Cost</h3>
 <ul>
@@ -126,7 +121,6 @@ const blogs = [
   </li>
 </ul>
 
-<hr />
 
 <h3>4. Use Case</h3>
 <ul>
@@ -149,6 +143,73 @@ const blogs = [
     image: "/dc.webp",
     date: "2025-09-02",
   },
+  {
+  id: "3",
+  title: "EV Car Charging: The Future of Green Mobility",
+  excerpt: "Electric Vehicles (EVs) are no longer just a trend—they are the future of sustainable transportation.",
+  content: `
+<p>Electric Vehicles (EVs) are no longer just a trend—they are the future of sustainable transportation. As more people shift to EV cars, the demand for reliable and efficient EV charging solutions is growing rapidly. Whether you are a new EV owner or planning to buy one, understanding how EV car charging stations work can make your driving experience smoother and hassle-free.</p>
+
+<h3>What is EV Car Charging?</h3>
+<p>EV car charging is the process of powering the battery of an electric car using an external energy source. Just like you refill petrol or diesel in traditional vehicles, an EV needs electricity to run. The only difference is that EV charging is cleaner, greener, and more cost-effective in the long run.</p>
+
+<h3>Types of EV Car Chargers</h3>
+<p>When it comes to EV chargers, there are mainly three categories:</p>
+<ol>
+  <li><strong>Level 1 Charger</strong>
+    <ul>
+      <li>Works with a standard household outlet.</li>
+      <li>Best for overnight home charging.</li>
+      <li>Slow charging speed.</li>
+    </ul>
+  </li>
+  <li><strong>Level 2 Charger</strong>
+    <ul>
+      <li>Requires a 240V outlet.</li>
+      <li>Popular as a home EV charger and in public charging stations.</li>
+      <li>Provides faster charging compared to Level 1.</li>
+    </ul>
+  </li>
+  <li><strong>DC Fast Charger</strong>
+    <ul>
+      <li>Found at public EV charging stations.</li>
+      <li>Charges an EV up to 80% in less than an hour.</li>
+      <li>Ideal for long-distance travel.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3>Why Install a Home EV Charger?</h3>
+<p>Installing a home EV charging station is one of the best decisions for EV owners. Here’s why:</p>
+<ul>
+  <li><strong>Convenience:</strong> Charge your car overnight and wake up to a full battery.</li>
+  <li><strong>Cost-Effective:</strong> Save money by charging at home instead of relying on public charging.</li>
+  <li><strong>Time Saving:</strong> No waiting in line at public chargers.</li>
+</ul>
+<p>With a residential EV charger, your car is always ready for the road.</p>
+
+<h3>Benefits of EV Car Charging</h3>
+<ul>
+  <li><strong>Eco-Friendly:</strong> Zero tailpipe emissions reduce air pollution.</li>
+  <li><strong>Lower Running Cost:</strong> Electricity is cheaper than fuel.</li>
+  <li><strong>Government Incentives:</strong> Many regions offer subsidies for EV car chargers.</li>
+  <li><strong>Future-Ready Investment:</strong> Installing an EV charger increases property value.</li>
+</ul>
+
+<h3>EV Charging Stations: Building a Green Network</h3>
+<p>Cities and highways are rapidly upgrading with EV charging infrastructure. The rise of EV charging stations near me searches shows the growing interest among drivers. Businesses like malls, offices, and hotels are also setting up EV fast chargers to attract customers and support green mobility.</p>
+
+<h3>The Future of EV Charging</h3>
+<ul>
+  <li>Smart EV chargers that optimize charging time.</li>
+  <li>Solar-powered EV charging stations for 100% clean energy.</li>
+  <li>Wireless EV charging for maximum convenience.</li>
+</ul>
+  `,
+  image: "/banner1.webp",
+  date: "2025-09-23",
+}
+
 ];
 
 export default blogs;

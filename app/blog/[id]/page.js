@@ -4,6 +4,8 @@ import React from "react";
 import { notFound } from "next/navigation";
 import blogs from "@/app/data/blog";
 import Image from "next/image";
+import Navbar from "@/app/Components/Navbar";
+import Footer from "@/app/Components/footer";
 
 export default function BlogDetail({ params }) {
   const unwrappedParams = React.use(params);
@@ -14,6 +16,8 @@ export default function BlogDetail({ params }) {
   if (!blog) return notFound();
 
   return (
+  <>
+  <Navbar/>
     <div className="container px-4 mx-auto pt-28">
       <Image
         src={blog.image}
@@ -32,6 +36,8 @@ export default function BlogDetail({ params }) {
         dangerouslySetInnerHTML={{ __html: blog.content }}
       />
     </div>
+  <Footer/>
+  </>
   );
 }
 

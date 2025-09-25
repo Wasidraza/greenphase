@@ -2,10 +2,13 @@ import React from "react";
 import WeServe from "../Components/WeServe";
 import Mission from "../Components/Mission";
 import Banner from "../Components/Banner";
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/footer";
 
 function about() {
   return (
     <>
+    <Navbar/>
       {/* About Us Section */}
       <section className="pt-10 bg-white">
         <div className="flex flex-col-reverse items-center justify-between gap-12 px-6 py-16 mx-auto lg:px-20 lg:flex-row">
@@ -48,6 +51,7 @@ function about() {
       <WeServe/>
       <Mission/>
       <Banner/>
+      <Footer/>
     </>
   );
 }

@@ -1,8 +1,11 @@
 import React from "react";
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/footer";
 
 function page() {
   return (
     <>
+    <Navbar/>
       <div className="container p-3 mx-auto pt-28">
         <h3 className="pb-3 text-3xl text-slate-900">Privacy Policy</h3>
         <p className="pb-2">
@@ -152,6 +155,7 @@ function page() {
           required under applicable laws
         </p>
       </div>
+      <Footer/>
     </>
   );
 }

@@ -16,7 +16,7 @@ const products = {
         size: "large",
         slug: "hc1",
         priceOptions: {
-          "7.2 kW": { price: 25000, mrp: 40000 },
+          "7.2 kW": { price: 1, mrp: 40000 },
           "11 kW": { price: 32000, mrp: 48000 },
           "22 kW": { price: 45000, mrp: 60000 },
         },
