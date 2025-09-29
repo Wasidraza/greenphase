@@ -1,21 +1,25 @@
-// app/api/phonepe/order-status/route.js
+import Order from "@/models/Order";
+import { connectDB } from "@/lib/mongodb";
 import { phonepeFetchToken } from "../get-token/route";
 
-const API_BASE =
-  process.env.PHONEPE_API_BASE ||
-  "https://api-preprod.phonepe.com/apis/pg-sandbox";
+const API_BASE = process.env.PHONEPE_API_BASE;
 
 export async function GET(req) {
   try {
+    await connectDB();
+
     const url = new URL(req.url);
     const merchantOrderId = url.searchParams.get("merchantOrderId");
-    if (!merchantOrderId)
+
+    if (!merchantOrderId) {
       return new Response(
         JSON.stringify({ error: "merchantOrderId required" }),
         { status: 400 }
       );
+    }
 
     const token = await phonepeFetchToken();
+
     const r = await fetch(
       `${API_BASE}/checkout/v2/order/${encodeURIComponent(
         merchantOrderId
@@ -27,12 +31,33 @@ export async function GET(req) {
         },
       }
     );
+
     const data = await r.json();
-    return new Response(JSON.stringify(data), {
-      status: r.status,
+
+    console.log("📩 PhonePe order-status response:", data);
+
+    let finalStatus = "PENDING";
+
+    if (data.code === "PAYMENT_SUCCESS" || data.data?.state === "COMPLETED") {
+      finalStatus = "SUCCESS";
+    } else if (data.code === "PAYMENT_FAILED") {
+      finalStatus = "FAILED";
+    }
+
+    // ✅ Update DB
+    await Order.findOneAndUpdate(
+      { merchantOrderId },
+      { status: finalStatus },
+      { new: true }
+    );
+
+    // ✅ Always return normalized response
+    return new Response(JSON.stringify({ status: finalStatus }), {
+      status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
+    console.error("❌ order-status error:", err);
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
     });

@@ -73,7 +73,9 @@ export default function EnquiryForm() {
               value={form.name}
               onChange={handleChange}
               required
-              className="w-full text-white placeholder-gray-400 bg-transparent outline-none "
+              pattern="^[a-zA-Z\s]{3,50}$"
+              title="Name should be 3-50 characters, letters only"
+              className="w-full text-white placeholder-gray-400 bg-transparent outline-none"
             />
           </div>
 
@@ -87,7 +89,9 @@ export default function EnquiryForm() {
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full text-white placeholder-gray-400 bg-transparent outline-none "
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+              title="Enter a valid email address"
+              className="w-full text-white placeholder-gray-400 bg-transparent outline-none"
             />
           </div>
 
@@ -101,6 +105,8 @@ export default function EnquiryForm() {
               value={form.city}
               onChange={handleChange}
               required
+              pattern="^[a-zA-Z\s]{2,50}$"
+              title="City should be 2-50 characters, letters only"
               className="w-full text-white placeholder-gray-400 bg-transparent outline-none focus:outline-1"
             />
           </div>
@@ -111,10 +117,12 @@ export default function EnquiryForm() {
             <input
               type="tel"
               name="phone"
-              placeholder="91*"
+              placeholder="91XXXXXXXXXX*"
               value={form.phone}
               onChange={handleChange}
               required
+              pattern="^[0-9]{10}$"
+              title="Enter a valid 10-digit phone number"
               className="w-full text-white placeholder-gray-400 bg-transparent outline-none focus:outline-1"
             />
           </div>
@@ -128,6 +136,7 @@ export default function EnquiryForm() {
               value={form.message}
               onChange={handleChange}
               rows={4}
+              maxLength={500}
               className="w-full text-white placeholder-gray-400 bg-transparent outline-none resize-none focus:outline-1"
             />
           </div>

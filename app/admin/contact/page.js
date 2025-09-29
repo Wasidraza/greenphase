@@ -36,7 +36,7 @@ function UserContact() {
       <div className="flex-1 ml-64">
         <AdminNav />
         <div className="p-6 lg:mt-2">
-          <h2 className="mb-4 text-2xl font-bold">Contact details</h2>
+          <h3 className="mb-4 text-2xl font-bold text-green-600">Contact details</h3>
 
           {/* Loading State */}
           {loading && <p className="text-gray-500">Loading contacts...</p>}

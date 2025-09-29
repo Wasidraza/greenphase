@@ -27,9 +27,10 @@ export async function POST(req) {
       expireAfter: 900,
       paymentFlow: {
         type: "PG_CHECKOUT",
-        redirectUrl: process.env.MERCHANT_REDIRECT_URL,
+        redirectUrl: `${process.env.MERCHANT_REDIRECT_URL}?merchantOrderId=${merchantOrderId}`,
         redirectMode: "GET",
       },
+
       customer: {
         name: `${form.firstName || ""} ${form.lastName || ""}`.trim(),
         mobile: form.phone || "",

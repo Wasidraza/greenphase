@@ -12,7 +12,6 @@ export default function AdminSidebar() {
     { name: "Orders", path: "/admin/orders" },
     { name: "Enquiries", path: "/admin/enquiries" },
     { name: "Contacts", path: "/admin/contact" },
-    { name: "Payments", path: "/admin/payment" },
   ];
 
   const handleLogout = () => {

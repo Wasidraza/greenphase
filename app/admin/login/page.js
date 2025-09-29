@@ -114,14 +114,14 @@ function AdminLogin() {
 
           <button
             type="submit"
-            className="w-full mt-5 text-white transition-opacity bg-indigo-500 rounded-full h-11 hover:opacity-90"
+            className="w-full mt-5 text-white transition-opacity bg-green-600 rounded-full h-11 hover:opacity-90"
             disabled={loading}
           >
             {loading ? "Logging in..." : "Login"}
           </button>
 
           <p className="mt-3 text-sm text-gray-500 mb-11">
-            <Link className="text-indigo-500" href="#">
+            <Link className="text-blue-500" href="#">
               Forgot Password
             </Link>
           </p>

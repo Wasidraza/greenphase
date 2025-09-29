@@ -63,15 +63,20 @@ export default function ContactPage() {
                   placeholder="Name*"
                   value={form.name}
                   onChange={handleChange}
+                  pattern="^[A-Za-z\s]{2,50}$"
+                  title="Name must be 2-50 characters, letters only."
                   className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 focus:outline-none"
                   required
                 />
+
                 <input
                   type="tel"
                   name="phone"
                   placeholder="Phone*"
                   value={form.phone}
                   onChange={handleChange}
+                  pattern="^[0-9]{10}$"
+                  title="Enter a valid 10-digit phone number."
                   className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 focus:outline-none"
                   required
                 />
@@ -93,6 +98,7 @@ export default function ContactPage() {
                 rows="6"
                 value={form.message}
                 onChange={handleChange}
+                maxLength={500}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 focus:outline-none"
               ></textarea>
 

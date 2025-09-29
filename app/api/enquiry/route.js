@@ -8,6 +8,7 @@ export async function POST(req) {
     const body = await req.json();
     const { name, email, city, phone, message } = body;
 
+    // Validation
     if (!name || !email || !city || !phone) {
       return NextResponse.json(
         { success: false, error: "All required fields must be filled" },
@@ -15,7 +16,16 @@ export async function POST(req) {
       );
     }
 
-    await Enquiry.create({ name, email, city, phone, message });
+    const newEnquiry = new Enquiry({
+      name,
+      email,
+      city,
+      phone,
+      message,
+      createdAt: new Date(),
+    });
+
+    await newEnquiry.save();
 
     return NextResponse.json({
       success: true,
@@ -23,6 +33,18 @@ export async function POST(req) {
     });
   } catch (error) {
     console.error("Error in /api/enquiry:", error);
+
+    if (error.code === 11000) {
+      return NextResponse.json(
+        {
+          success: true,
+          message:
+            "Your enquiry has been submitted successfully!",
+        },
+        { status: 200 }
+      );
+    }
+
     return NextResponse.json(
       { success: false, error: "Server error while submitting enquiry" },
       { status: 500 }
@@ -30,18 +52,13 @@ export async function POST(req) {
   }
 }
 
-
-// GET request - fetch all enquiries
 export async function GET() {
   try {
     await connectDB();
 
     const enquiries = await Enquiry.find().sort({ createdAt: -1 });
 
-    return NextResponse.json(
-      { success: true, enquiries },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, enquiries }, { status: 200 });
   } catch (error) {
     console.error("GET /api/enquiry error:", error);
     return NextResponse.json(
