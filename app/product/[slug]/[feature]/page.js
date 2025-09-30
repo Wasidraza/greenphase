@@ -36,6 +36,11 @@ export default function FeaturePage({ params }) {
   const handleBuyNow = () => {
     const user = localStorage.getItem("user");
 
+    if (isDCCharger) {
+      router.push("/contact");
+      return;
+    }
+
     const selectedPriceData = priceOptions[selectedKW];
 
     const checkoutUrl = `/checkout?title=${encodeURIComponent(
@@ -52,6 +57,7 @@ export default function FeaturePage({ params }) {
       router.push(checkoutUrl);
     }
   };
+
   return (
     <>
       <Navbar />

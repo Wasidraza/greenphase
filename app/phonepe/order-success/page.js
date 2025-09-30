@@ -1,4 +1,3 @@
-// NO "use client" here — keep as server component
 import Footer from "@/app/Components/footer";
 import Navbar from "@/app/Components/Navbar";
 import OrderSuccessClient from "@/app/Components/order-success";
