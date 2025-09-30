@@ -31,26 +31,35 @@ export default function OrderSuccessClient() {
 
         if (!mounted) return;
 
-        if (data.status === "SUCCESS") {
-          setStatus("SUCCESS");
-          toast.success("Payment successful! 🎉");
-          localStorage.removeItem("lastOrderId");
+        switch (data.status) {
+          case "SUCCESS":
+            setStatus("SUCCESS");
+            localStorage.removeItem("lastOrderId");
+            toast.success("Payment successful! 🎉");
 
-          if (data.emailStatus === "SENT") {
-            toast.success("Confirmation email sent to your inbox!");
-          } else if (data.emailStatus === "FAILED") {
-            toast.error("We couldn't send email. Check your order later.");
-          }
-        } else if (data.status === "FAILED") {
-          setStatus("FAILED");
-          toast.error("Payment failed");
-        } else {
-          timerId = setTimeout(checkStatus, 3000);
+            if (data.emailStatus === "SENT") {
+              toast.success("Confirmation email sent to your inbox!");
+            } else if (data.emailStatus === "FAILED") {
+              toast.error("We couldn't send email. Check your order later.");
+            }
+            break;
+
+          case "FAILED":
+            setStatus("FAILED");
+            localStorage.removeItem("lastOrderId");
+            toast.error("Payment failed");
+            break;
+
+          case "PENDING":
+          default:
+            timerId = setTimeout(checkStatus, 3000); 
+            break;
         }
       } catch (err) {
         if (!mounted) return;
         console.error("Error checking order status:", err);
         setStatus("FAILED");
+        localStorage.removeItem("lastOrderId");
         toast.error("Error while checking payment status.");
       }
     };
@@ -95,6 +104,7 @@ export default function OrderSuccessClient() {
     );
   }
 
+  // SUCCESS
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-green-50">
       <div className="flex flex-col items-center w-full max-w-md p-8 text-center bg-white shadow-xl rounded-2xl">

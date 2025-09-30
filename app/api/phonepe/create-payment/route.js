@@ -10,10 +10,17 @@ export async function POST(req) {
 
     const { amountRupees, productTitle, form } = body;
 
+    // ✅ Basic payload validation
     if (!form) {
       return new Response(JSON.stringify({ error: "Form data missing" }), {
         status: 400,
       });
+    }
+    if (!amountRupees || !productTitle) {
+      return new Response(
+        JSON.stringify({ error: "Amount or product title missing" }),
+        { status: 400 }
+      );
     }
 
     const merchantOrderId = `ORDER_${Date.now()}_${Math.floor(
@@ -30,7 +37,7 @@ export async function POST(req) {
         redirectUrl: `${process.env.MERCHANT_REDIRECT_URL}?merchantOrderId=${merchantOrderId}`,
         redirectMode: "GET",
       },
-
+      callbackUrl: process.env.PHONEPE_CALLBACK_URL, // ✅ Callback added
       customer: {
         name: `${form.firstName || ""} ${form.lastName || ""}`.trim(),
         mobile: form.phone || "",
@@ -61,21 +68,22 @@ export async function POST(req) {
 
     const token = await phonepeFetchToken();
 
+    // ✅ Header simplified: X-CALLBACK-URL removed
     const res = await fetch(`${process.env.PHONEPE_API_BASE}/checkout/v2/pay`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `O-Bearer ${token}`,
-        "X-CALLBACK-URL": process.env.PHONEPE_CALLBACK_URL || "",
       },
       body: JSON.stringify(payload),
     });
 
     const data = await res.json();
+
     if (!res.ok) {
       console.error("PhonePe payment failed:", data);
       return new Response(
-        JSON.stringify({ error: data || "PhonePe pay failed" }),
+        JSON.stringify({ error: data?.error || data?.message || "PhonePe pay failed" }),
         { status: res.status || 500 }
       );
     }
