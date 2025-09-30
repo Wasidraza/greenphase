@@ -37,7 +37,7 @@ export async function GET() {
   try {
     await connectDB();
 
-    const contacts = await Contact.find().sort({ createdAt: -1 }); // newest first
+    const contacts = await Contact.find().sort({ createdAt: -1 });
 
     return NextResponse.json(
       { success: true, contacts },

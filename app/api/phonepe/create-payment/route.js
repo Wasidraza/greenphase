@@ -39,7 +39,7 @@ export async function POST(req) {
       products: [{ name: productTitle || "Product", quantity: 1 }],
     };
 
-    // ✅ Save order in DB
+    // Save order in DB
     const newOrder = await Order.create({
       merchantOrderId,
       productTitle,
@@ -57,7 +57,7 @@ export async function POST(req) {
       status: "PENDING",
     });
 
-    console.log("✅ Order saved in DB:", newOrder);
+    console.log("Order saved in DB:", newOrder);
 
     const token = await phonepeFetchToken();
 
@@ -73,7 +73,7 @@ export async function POST(req) {
 
     const data = await res.json();
     if (!res.ok) {
-      console.error("❌ PhonePe payment failed:", data);
+      console.error("PhonePe payment failed:", data);
       return new Response(
         JSON.stringify({ error: data || "PhonePe pay failed" }),
         { status: res.status || 500 }
@@ -85,7 +85,7 @@ export async function POST(req) {
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (err) {
-    console.error("❌ POST /api/phonepe/create-payment error:", err);
+    console.error("POST /api/phonepe/create-payment error:", err);
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
@@ -99,7 +99,7 @@ export async function GET() {
     const orders = await Order.find().sort({ createdAt: -1 });
     return NextResponse.json({ success: true, orders }, { status: 200 });
   } catch (err) {
-    console.error("❌ GET /api/phonepe/create-payment error:", err);
+    console.error("GET /api/phonepe/create-payment error:", err);
     return NextResponse.json(
       { success: false, error: "Server error while fetching orders" },
       { status: 500 }

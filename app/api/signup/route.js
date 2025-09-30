@@ -16,7 +16,6 @@ export async function POST(req) {
       );
     }
 
-    // ✅ Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
@@ -25,7 +24,6 @@ export async function POST(req) {
       );
     }
 
-    // ✅ Hash password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({ 
@@ -49,13 +47,11 @@ export async function POST(req) {
   }
 }
 
-
-// GET request - fetch all users
 export async function GET() {
   try {
     await connectDB();
 
-    const users = await User.find().sort({ createdAt: -1 }).select("-password"); // hide passwords
+    const users = await User.find().sort({ createdAt: -1 }).select("-password");
 
     return NextResponse.json(
       { success: true, users },

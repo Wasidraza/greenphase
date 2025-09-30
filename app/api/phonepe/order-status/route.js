@@ -44,20 +44,18 @@ export async function GET(req) {
       finalStatus = "FAILED";
     }
 
-    // ✅ Update DB
     await Order.findOneAndUpdate(
       { merchantOrderId },
       { status: finalStatus },
       { new: true }
     );
 
-    // ✅ Always return normalized response
     return new Response(JSON.stringify({ status: finalStatus }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
-    console.error("❌ order-status error:", err);
+    console.error("order-status error:", err);
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
     });
