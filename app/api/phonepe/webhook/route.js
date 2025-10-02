@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/mongodb";
 import nodemailer from "nodemailer";
 
 export async function POST(req) {
+  console.log("Webhook hit!");
   try {
     await connectDB();
 
