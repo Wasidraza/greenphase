@@ -2,7 +2,6 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
 import Navbar from "./Navbar";
 import Footer from "./footer";
 import { useAuth } from "../context/AuthContext";
@@ -30,19 +29,16 @@ export default function Checkout() {
 
   useEffect(() => {
     if (!user) {
-      toast.error("Please signup/login first before shopping!");
+      console.warn("Please signup/login first before shopping!");
     }
 
-    // 🔑 Check last order if still pending
     const merchantOrderId = localStorage.getItem("lastOrderId");
     if (merchantOrderId) {
       fetch(`/api/phonepe/order-status?merchantOrderId=${merchantOrderId}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.status === "PENDING") {
-            toast.error(
-              "Your last payment was not completed. Please try again."
-            );
+            console.warn("Your last payment was not completed. Please try again.");
           }
         })
         .catch((err) => {
@@ -58,7 +54,7 @@ export default function Checkout() {
     e.preventDefault();
 
     if (!user) {
-      toast.error("You must signup/login first!");
+      console.warn("You must signup/login first!");
       return;
     }
 
@@ -94,10 +90,7 @@ export default function Checkout() {
         data?.phonepeResponse?.data?.redirect_url;
 
       if (!redirectUrl) {
-        toast.error(
-          "Payment init succeeded but redirect URL missing. Order: " +
-            data.merchantOrderId
-        );
+        console.warn("Payment init succeeded but redirect URL missing. Order:", data.merchantOrderId);
         router.push(`/order-status?merchantOrderId=${data.merchantOrderId}`);
         return;
       }
@@ -105,7 +98,6 @@ export default function Checkout() {
       window.location.href = redirectUrl;
     } catch (err) {
       console.error("pay error", err);
-      toast.error("Payment failed: " + (err.message || err));
     }
   };
 

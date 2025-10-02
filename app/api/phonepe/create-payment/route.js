@@ -10,7 +10,6 @@ export async function POST(req) {
 
     const { amountRupees, productTitle, form } = body;
 
-    // ✅ Basic payload validation
     if (!form) {
       return new Response(JSON.stringify({ error: "Form data missing" }), {
         status: 400,
@@ -37,7 +36,7 @@ export async function POST(req) {
         redirectUrl: `${process.env.MERCHANT_REDIRECT_URL}?merchantOrderId=${merchantOrderId}`,
         redirectMode: "GET",
       },
-      callbackUrl: process.env.PHONEPE_CALLBACK_URL, // ✅ Callback added
+      callbackUrl: process.env.PHONEPE_CALLBACK_URL, 
       customer: {
         name: `${form.firstName || ""} ${form.lastName || ""}`.trim(),
         mobile: form.phone || "",
@@ -46,7 +45,6 @@ export async function POST(req) {
       products: [{ name: productTitle || "Product", quantity: 1 }],
     };
 
-    // Save order in DB
     const newOrder = await Order.create({
       merchantOrderId,
       productTitle,
@@ -68,7 +66,6 @@ export async function POST(req) {
 
     const token = await phonepeFetchToken();
 
-    // ✅ Header simplified: X-CALLBACK-URL removed
     const res = await fetch(`${process.env.PHONEPE_API_BASE}/checkout/v2/pay`, {
       method: "POST",
       headers: {
