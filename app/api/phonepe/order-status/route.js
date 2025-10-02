@@ -7,16 +7,13 @@ const API_BASE = process.env.PHONEPE_API_BASE;
 export async function GET(req) {
   try {
     await connectDB();
-
     const url = new URL(req.url);
     const merchantOrderId = url.searchParams.get("merchantOrderId");
-
-    if (!merchantOrderId) {
+    if (!merchantOrderId)
       return new Response(
         JSON.stringify({ error: "merchantOrderId required" }),
         { status: 400 }
       );
-    }
 
     const token = await phonepeFetchToken();
 
@@ -33,16 +30,17 @@ export async function GET(req) {
     );
 
     const data = await r.json();
-
     console.log("📩 PhonePe order-status response:", data);
 
     let finalStatus = "PENDING";
-
-    if (data.code === "PAYMENT_SUCCESS" || data.data?.state === "COMPLETED") {
+    if (data.code === "PAYMENT_SUCCESS" || data.data?.state === "COMPLETED")
       finalStatus = "SUCCESS";
-    } else if (data.code === "PAYMENT_FAILED") {
+    else if (
+      data.code === "PAYMENT_ERROR" ||
+      data.code === "PAYMENT_FAILED" ||
+      data.data?.state === "FAILED"
+    )
       finalStatus = "FAILED";
-    }
 
     await Order.findOneAndUpdate(
       { merchantOrderId },
