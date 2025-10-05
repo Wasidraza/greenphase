@@ -1,50 +1,43 @@
-// app/api/phonepe/get-token/route.js
-export async function phonepeFetchToken() {
+import crypto from "crypto";
+
+let cached = { token: null, expiresAt: 0 };
+
+const AUTH_BASE = process.env.PHONEPE_AUTH_BASE || "https://api-preprod.phonepe.com/apis/identity-manager";
+const AUTH_URL = `${AUTH_BASE}/v1/oauth/token`;
+
+async function phonepeFetchToken() {
+  if (cached.token && Date.now() < cached.expiresAt) return cached.token;
+
+  const body = new URLSearchParams({
+    client_id: process.env.PHONEPE_CLIENT_ID || "",
+    client_secret: process.env.PHONEPE_CLIENT_SECRET || "",
+    grant_type: "client_credentials",
+  });
+
+  const res = await fetch(AUTH_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
+    body: body.toString(),
+  });
+
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error("PhonePe token fetch failed: " + txt);
+  }
+  const data = await res.json();
+  cached.token = data.access_token;
+  // expires_in seconds; subtract small buffer
+  cached.expiresAt = Date.now() + ((data.expires_in || 3600) - 30) * 1000;
+  return cached.token;
+}
+
+// Expose for imports by other server routes
+export { phonepeFetchToken };
+export async function GET() {
   try {
-    console.log("🔐 Fetching token...");
-    
-    const authPayload = {
-      clientId: process.env.PHONEPE_CLIENT_ID,
-      clientSecret: process.env.PHONEPE_CLIENT_SECRET,
-      merchantId: process.env.PHONEPE_MERCHANT_ID
-    };
-
-    console.log("📦 Auth payload details:", {
-      clientId: process.env.PHONEPE_CLIENT_ID ? "SET" : "MISSING",
-      clientSecret: process.env.PHONEPE_CLIENT_SECRET ? "SET" : "MISSING", 
-      merchantId: process.env.PHONEPE_MERCHANT_ID ? "SET" : "MISSING",
-      authBase: process.env.PHONEPE_AUTH_BASE
-    });
-
-    // ✅ CORRECT AUTH ENDPOINT
-    const authUrl = `${process.env.PHONEPE_AUTH_BASE}/v1/oauth/token`;
-    console.log("🔄 Calling Auth API:", authUrl);
-
-    const response = await fetch(authUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(authPayload),
-    });
-
-    console.log("🔑 Auth API Status:", response.status);
-    
-    const data = await response.json();
-    console.log("🔑 Auth API Response:", JSON.stringify(data, null, 2));
-
-    if (!response.ok) {
-      throw new Error(`Authentication failed: ${response.status} - ${data.message || 'Unknown error'}`);
-    }
-
-    if (!data.access_token) {
-      throw new Error(`No access token received: ${data.message || 'Token missing'}`);
-    }
-
-    console.log("✅ Token received successfully");
-    return data.access_token;
-  } catch (error) {
-    console.error('❌ Token fetch error:', error.message);
-    throw error;
+    const token = await phonepeFetchToken();
+    return new Response(JSON.stringify({ token }), { status: 200, headers: { "Content-Type": "application/json" } });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: { "Content-Type": "application/json" } });
   }
 }

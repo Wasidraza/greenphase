@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Footer from "./footer";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 export default function Checkout() {
   const router = useRouter();
@@ -26,9 +27,6 @@ export default function Checkout() {
     state: "",
     pincode: "",
   });
-
-  // ✅ ADD THIS LINE - Loading state define karo
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -57,11 +55,9 @@ export default function Checkout() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
     if (!user) {
-      alert("You must signup/login first!");
-      setLoading(false);
+      console.warn("You must signup/login first!");
       return;
     }
 
@@ -70,10 +66,11 @@ export default function Checkout() {
         amountRupees: Number(price),
         productTitle: title,
         productColor: color,
+        power: power,
         form,
       };
 
-      console.log("📤 Creating payment request...");
+      console.log("📤 Sending payload:", payload);
 
       const res = await fetch("/api/phonepe/create-payment", {
         method: "POST",
@@ -84,32 +81,22 @@ export default function Checkout() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Payment initiation failed");
+        throw new Error(data?.error || "Payment init failed");
       }
 
-      console.log("✅ Payment initiated:", data.merchantOrderId);
-
-      // Save order ID for status checking
-      if (data.merchantOrderId) {
+      // ✅ NEW: Use the redirectUrl directly from response
+      if (data.redirectUrl) {
         localStorage.setItem("lastOrderId", data.merchantOrderId);
-      }
-
-      // ✅ FIX: Remove baseUrl from here
-      const redirectUrl = data.redirectUrl;
-
-      if (redirectUrl) {
-        console.log("🔗 Redirecting to PhonePe...");
-        window.location.href = redirectUrl;
+        window.location.href = data.redirectUrl;
       } else {
-        console.error("❌ No redirect URL received");
-        throw new Error("Payment gateway error - no redirect URL received");
+        console.error("No redirect URL received");
+        router.push(`/order-success?merchantOrderId=${data.merchantOrderId}`);
       }
     } catch (err) {
-      console.error("💥 Payment error:", err);
-      alert(`Payment Error: ${err.message}`);
-      setLoading(false);
+      console.error("Payment error:", err);
     }
   };
+
   return (
     <>
       <Navbar />
@@ -219,16 +206,9 @@ export default function Checkout() {
 
           <button
             type="submit"
-            disabled={loading} // ✅ Loading state use karo
-            className={`w-full px-4 py-2 text-white rounded ${
-              loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-green-600 hover:bg-green-700"
-            }`}
+            className="w-full px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700"
           >
-            {loading
-              ? "Processing..."
-              : `Pay ₹${Number(price).toLocaleString("en-IN")}`}
+            Pay Now
           </button>
         </form>
       </div>
