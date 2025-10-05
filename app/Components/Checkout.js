@@ -1,4 +1,3 @@
-// app/checkout/page.js
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
@@ -28,37 +27,30 @@ export default function Checkout() {
     pincode: "",
   });
 
+  // ✅ ADD THIS LINE - Loading state define karo
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!user) {
-      alert("Please signup/login first before shopping!");
-      router.push("/login");
-      return;
+      console.warn("Please signup/login first before shopping!");
     }
 
-    // Previous pending order check
-    const lastOrderId = localStorage.getItem("lastOrderId");
-    if (lastOrderId) {
-      checkOrderStatus(lastOrderId);
+    const merchantOrderId = localStorage.getItem("lastOrderId");
+    if (merchantOrderId) {
+      fetch(`/api/phonepe/order-status?merchantOrderId=${merchantOrderId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "PENDING") {
+            console.warn(
+              "Your last payment was not completed. Please try again."
+            );
+          }
+        })
+        .catch((err) => {
+          console.error("Error checking last order status:", err);
+        });
     }
-  }, [user, router]);
-
-  const checkOrderStatus = async (orderId) => {
-    try {
-      const res = await fetch(
-        `/api/phonepe/order-status?merchantOrderId=${orderId}`
-      );
-      const data = await res.json();
-
-      if (data.status === "PENDING") {
-        console.warn("Your last payment was not completed. Please try again.");
-        localStorage.removeItem("lastOrderId");
-      }
-    } catch (err) {
-      console.error("Error checking last order:", err);
-    }
-  };
+  }, [user]);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -66,6 +58,12 @@ export default function Checkout() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    if (!user) {
+      alert("You must signup/login first!");
+      setLoading(false);
+      return;
+    }
 
     try {
       const payload = {
@@ -91,18 +89,20 @@ export default function Checkout() {
 
       console.log("✅ Payment initiated:", data.merchantOrderId);
 
-      // Save order ID
+      // Save order ID for status checking
       if (data.merchantOrderId) {
         localStorage.setItem("lastOrderId", data.merchantOrderId);
       }
 
-      // ✅ IMPORTANT: PhonePe ka redirect URL use karo
-      if (data.redirectUrl) {
-        console.log("🔗 Redirecting to PhonePe:", data.redirectUrl);
-        window.location.href = data.redirectUrl;
+      // ✅ FIX: Remove baseUrl from here
+      const redirectUrl = data.redirectUrl;
+
+      if (redirectUrl) {
+        console.log("🔗 Redirecting to PhonePe...");
+        window.location.href = redirectUrl;
       } else {
         console.error("❌ No redirect URL received");
-        throw new Error("Payment gateway error - no redirect URL");
+        throw new Error("Payment gateway error - no redirect URL received");
       }
     } catch (err) {
       console.error("💥 Payment error:", err);
@@ -134,37 +134,26 @@ export default function Checkout() {
           </div>
         </div>
 
-        {/* Customer Details Form */}
+        {/* Customer Details */}
         <form
           onSubmit={handleSubmit}
           className="p-4 space-y-4 bg-white border rounded-lg"
         >
-          {/* Contact Details */}
           <div>
-            <h3 className="mb-2 text-lg font-semibold">Contact Information</h3>
+            <h3 className="mb-2 text-lg font-semibold">Contact</h3>
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="Email Address"
+              placeholder="Email"
               className="w-full p-2 mb-3 border rounded"
-              required
-            />
-            <input
-              type="tel"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              placeholder="Phone Number"
-              className="w-full p-2 border rounded"
               required
             />
           </div>
 
-          {/* Shipping Address */}
           <div>
-            <h3 className="mb-2 text-lg font-semibold">Shipping Address</h3>
+            <h3 className="mb-2 text-lg font-semibold">Delivery</h3>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               <input
                 name="firstName"
@@ -187,7 +176,7 @@ export default function Checkout() {
               name="address"
               value={form.address}
               onChange={handleChange}
-              placeholder="Full Address"
+              placeholder="Address"
               className="w-full p-2 mt-3 border rounded"
               required
             />
@@ -217,13 +206,21 @@ export default function Checkout() {
                 required
               />
             </div>
+            <input
+              type="tel"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              placeholder="Phone"
+              className="w-full p-2 mt-2 border rounded"
+              required
+            />
           </div>
 
-          {/* Pay Now Button */}
           <button
             type="submit"
-            disabled={loading}
-            className={`w-full px-4 py-3 text-white rounded font-semibold ${
+            disabled={loading} // ✅ Loading state use karo
+            className={`w-full px-4 py-2 text-white rounded ${
               loading
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-green-600 hover:bg-green-700"

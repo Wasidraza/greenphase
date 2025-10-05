@@ -2,7 +2,9 @@
 import Order from "@/models/Order";
 import { connectDB } from "@/lib/mongodb";
 import nodemailer from "nodemailer";
-import { getTempOrder, deleteTempOrder } from "../utils/shared-storage/route";
+
+// Temporary storage (create-payment se import karo ya yahi define karo)
+const tempOrders = new Map();
 
 export async function POST(req) {
   console.log("🔄 PhonePe Webhook Received!");
@@ -10,20 +12,46 @@ export async function POST(req) {
   try {
     await connectDB();
 
-    const body = await req.json();
-    console.log("📦 Webhook payload:", JSON.stringify(body, null, 2));
+    // Webhook verification ke liye headers capture karo
+    const headers = {
+      authorization: req.headers.get("authorization") || "",
+      "content-type": req.headers.get("content-type") || "",
+    };
 
-    // PhonePe ke different response formats handle karo
-    const responseData = body?.response?.data || body?.data || {};
+    console.log("📨 Webhook Headers:", headers);
+
+    // Raw body as string capture karo for verification
+    const rawBody = await req.text();
+    console.log("📦 Raw Webhook Body:", rawBody);
+
+    // Parse JSON body
+    const body = JSON.parse(rawBody);
+    console.log("📦 Parsed Webhook Body:", JSON.stringify(body, null, 2));
+
+    // ✅ NEW PHONEPE WEBHOOK STRUCTURE (Documentation ke according)
+    const callbackType = body?.type;
+    const payload = body?.payload || {};
+
+    // Extract data from new structure
     const merchantOrderId =
-      responseData.merchantTransactionId ||
-      responseData.merchantOrderId ||
-      body?.merchantOrderId;
+      payload?.originalMerchantOrderId ||
+      payload?.merchantOrderId ||
+      payload?.merchantTransactionId;
 
-    const statusCode = body?.response?.code || body?.code;
-    const phonepeOrderId = responseData.transactionId || "";
+    const phonepeOrderId = payload?.orderId || "";
+    const state = payload?.state || "";
+    const amount = payload?.amount || 0;
+    const errorCode = payload?.errorCode || "";
+    const paymentDetails = payload?.paymentDetails || [];
 
-    console.log(`🔍 Webhook for: ${merchantOrderId}, Status: ${statusCode}`);
+    console.log(`🔍 Webhook Details:`, {
+      callbackType,
+      merchantOrderId,
+      phonepeOrderId,
+      state,
+      amount,
+      errorCode,
+    });
 
     if (!merchantOrderId) {
       console.error("❌ merchantOrderId missing in webhook");
@@ -33,16 +61,18 @@ export async function POST(req) {
       );
     }
 
-    // Status mapping
+    // ✅ NEW STATUS MAPPING (PhonePe documentation ke according)
     let status = "PENDING";
-    if (statusCode === "PAYMENT_SUCCESS") status = "SUCCESS";
-    if (statusCode === "PAYMENT_ERROR" || statusCode === "PAYMENT_FAILED")
+    if (state === "COMPLETED" || callbackType === "CHECKOUT_ORDER_COMPLETED") {
+      status = "SUCCESS";
+    } else if (state === "FAILED" || callbackType === "CHECKOUT_ORDER_FAILED") {
       status = "FAILED";
+    }
 
     console.log(`🎯 Payment ${status} for order: ${merchantOrderId}`);
 
-    // ✅ IMPORTANT: Temporary storage se data lo
-    const tempOrder = getTempOrder(merchantOrderId);
+    // ✅ IMPORTANT: Temporary storage se data lo (payment se pehle ka data)
+    const tempOrder = tempOrders.get(merchantOrderId);
 
     let order;
 
@@ -56,12 +86,14 @@ export async function POST(req) {
         productColor: tempOrder.productColor,
         amount: tempOrder.amount,
         customer: tempOrder.customer,
-        status: status, // Actual payment status
+        status: status,
         phonepeOrderId: phonepeOrderId,
+        paymentDetails: paymentDetails, // Store payment details
+        errorCode: errorCode, // Store error code if any
       });
 
       // Temporary data delete karo
-      deleteTempOrder(merchantOrderId);
+      tempOrders.delete(merchantOrderId);
       console.log("✅ Order saved in DB after payment confirmation");
     } else {
       // Agar temp data nahi mila, existing order update karo
@@ -69,6 +101,8 @@ export async function POST(req) {
       if (order) {
         order.status = status;
         order.phonepeOrderId = phonepeOrderId;
+        order.paymentDetails = paymentDetails;
+        order.errorCode = errorCode;
         order.updatedAt = new Date();
         await order.save();
         console.log("✅ Existing order updated in DB");
@@ -85,24 +119,39 @@ export async function POST(req) {
       await sendEmail(order, status);
     }
 
+    // ✅ Webhook verification response (PhonePe ko success batao)
     return new Response(
       JSON.stringify({
         success: true,
-        message: `Order ${merchantOrderId} ${status}`,
+        message: `Webhook processed successfully - Order ${merchantOrderId} ${status}`,
         orderId: order.merchantOrderId,
         status: status,
       }),
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
   } catch (err) {
     console.error("❌ Webhook processing error:", err);
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-    });
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: err.message,
+      }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
 }
 
-// Email function (same as before)
+// Email function update karo
 async function sendEmail(order, status) {
   try {
     if (!order.customer?.email) {
@@ -154,6 +203,9 @@ function getEmailTemplate(order, status) {
           <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #22c55e;">
             <h3 style="margin-top: 0; color: #374151;">Order Details:</h3>
             <p><strong>Order ID:</strong> ${order.merchantOrderId}</p>
+            <p><strong>Transaction ID:</strong> ${
+              order.phonepeOrderId || "Processing..."
+            }</p>
             <p><strong>Product:</strong> ${order.productTitle}</p>
             <p><strong>Amount:</strong> ₹${(order.amount / 100).toLocaleString(
               "en-IN"
@@ -186,6 +238,11 @@ function getEmailTemplate(order, status) {
             <p><strong>Amount:</strong> ₹${(order.amount / 100).toLocaleString(
               "en-IN"
             )}</p>
+            ${
+              order.errorCode
+                ? `<p><strong>Error Code:</strong> ${order.errorCode}</p>`
+                : ""
+            }
           </div>
           <p>Please try again or contact our support team if the issue persists.</p>
           <br>
@@ -197,3 +254,6 @@ function getEmailTemplate(order, status) {
 
   return null;
 }
+
+// Export tempOrders for create-payment to use
+export { tempOrders };

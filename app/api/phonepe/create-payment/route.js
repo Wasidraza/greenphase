@@ -1,7 +1,9 @@
 // app/api/phonepe/create-payment/route.js
 import { connectDB } from "@/lib/mongodb";
 import { phonepeFetchToken } from "../get-token/route";
-import { setTempOrder, deleteTempOrder } from "../utils/shared-storage/route";
+
+// Temporary storage
+const tempOrders = new Map();
 
 export async function POST(req) {
   try {
@@ -12,7 +14,7 @@ export async function POST(req) {
 
     if (!form || !form.email || !form.phone) {
       return new Response(
-        JSON.stringify({ error: "Customer email and phone are required" }), 
+        JSON.stringify({ error: "Customer details required" }), 
         { status: 400 }
       );
     }
@@ -22,8 +24,8 @@ export async function POST(req) {
 
     console.log("📝 Creating TEMPORARY order:", merchantOrderId);
 
-    // ✅ Temporary storage mein save karo (Database mein nahi)
-    setTempOrder(merchantOrderId, {
+    // Temporary storage
+    tempOrders.set(merchantOrderId, {
       merchantOrderId,
       productTitle,
       productColor: productColor || "Standard",
@@ -42,24 +44,36 @@ export async function POST(req) {
       createdAt: new Date(),
     });
 
-    // ✅ CORRECT URLS
-    const baseUrl = process.env.NEXTAUTH_URL;
-    const redirectUrl = `${baseUrl}/order-success`;
-    const callbackUrl = `${baseUrl}/api/phonepe/webhook`;
+    console.log("💾 Temp order saved");
 
-    console.log("🔗 Using URLs:", { baseUrl, redirectUrl, callbackUrl });
+    // Get Token
+    let token;
+    try {
+      token = await phonepeFetchToken();
+      console.log("✅ Token received");
+    } catch (tokenError) {
+      console.error("❌ Token error:", tokenError);
+      return new Response(
+        JSON.stringify({ error: "Authentication failed" }), 
+        { status: 401 }
+      );
+    }
 
+    // ✅ FIX: Define baseUrl here
+    const baseUrl = process.env.NEXTAUTH_URL || "https://greenphase.in";
+
+    // ✅ CORRECT PAYMENT PAYLOAD
     const payload = {
-      merchantOrderId,
-      amount: Math.round(Number(amountRupees) * 100),
+      merchantOrderId: merchantOrderId,
+      amount: Math.round(Number(amountRupees) * 100), // in paise
       merchantId: process.env.PHONEPE_MERCHANT_ID,
-      expireAfter: 900,
+      expireAfter: 900, // 15 minutes
       paymentFlow: {
         type: "PG_CHECKOUT",
-        redirectUrl: `${redirectUrl}?merchantOrderId=${merchantOrderId}`,
-        redirectMode: "REDIRECT",
+        redirectUrl: `${baseUrl}/order-success?merchantOrderId=${merchantOrderId}`,
+        redirectMode: "GET",
       },
-      callbackUrl: callbackUrl,
+      callbackUrl: `${baseUrl}/api/phonepe/webhook`,
       customer: {
         name: `${form.firstName || ""} ${form.lastName || ""}`.trim(),
         mobile: form.phone || "",
@@ -71,75 +85,69 @@ export async function POST(req) {
       }],
     };
 
-    console.log("🔄 Calling PhonePe API...");
+    console.log("📦 Payment Payload:", JSON.stringify(payload, null, 2));
 
-    const token = await phonepeFetchToken();
+    // ✅ CORRECT PAYMENT ENDPOINT
+    const paymentEndpoint = `${process.env.PHONEPE_API_BASE}/checkout/v2/pay`;
+    console.log("🔄 Calling PhonePe API:", paymentEndpoint);
 
-    const phonepeResponse = await fetch(`${process.env.PHONEPE_API_BASE}/checkout/v2/pay`, {
-      method: "POST",
+    const phonepeResponse = await fetch(paymentEndpoint, {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `O-Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
     });
 
     const phonepeData = await phonepeResponse.json();
+    
+    console.log("📞 PhonePe API Response:", JSON.stringify(phonepeData, null, 2));
 
     if (!phonepeResponse.ok) {
       console.error("❌ PhonePe API error:", phonepeData);
-      deleteTempOrder(merchantOrderId);
+      tempOrders.delete(merchantOrderId);
       
       return new Response(
         JSON.stringify({ 
-          error: phonepeData?.error?.message || "Payment initiation failed" 
+          error: phonepeData?.message || "Payment initiation failed" 
         }), 
         { status: phonepeResponse.status || 500 }
       );
     }
 
-    console.log("✅ PhonePe response received");
+    // Extract redirect URL
+    const redirectUrl = phonepeData?.data?.redirectUrl || 
+                       phonepeData?.redirectUrl;
 
-    // ✅ PhonePe se redirect URL extract karo
-    const phonepeRedirectUrl = 
-      phonepeData?.data?.redirectUrl || 
-      phonepeData?.redirectUrl ||
-      phonepeData?.redirect_url;
-
-    if (!phonepeRedirectUrl) {
-      console.error("❌ No redirect URL from PhonePe");
-      deleteTempOrder(merchantOrderId);
+    if (!redirectUrl) {
+      console.error("❌ No redirect URL:", phonepeData);
+      tempOrders.delete(merchantOrderId);
       return new Response(
-        JSON.stringify({ 
-          error: "No redirect URL received from payment gateway"
-        }), 
+        JSON.stringify({ error: "No redirect URL received" }), 
         { status: 500 }
       );
     }
 
-    console.log("🔗 PhonePe Redirect URL:", phonepeRedirectUrl);
+    console.log("🔗 Redirect URL:", redirectUrl);
 
     return new Response(
       JSON.stringify({ 
         success: true,
         merchantOrderId, 
-        redirectUrl: phonepeRedirectUrl,
+        redirectUrl: redirectUrl,
         phonepeResponse: phonepeData,
       }), 
-      { 
-        status: 200, 
-        headers: { "Content-Type": "application/json" } 
-      }
+      { status: 200 }
     );
 
   } catch (err) {
     console.error("❌ Create payment error:", err);
     return new Response(
       JSON.stringify({ error: "Internal server error: " + err.message }), 
-      { 
-        status: 500, 
-        headers: { "Content-Type": "application/json" } 
-      }
+      { status: 500 }
     );
   }
 }
+
+export { tempOrders };
