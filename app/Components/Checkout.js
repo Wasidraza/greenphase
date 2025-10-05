@@ -63,16 +63,9 @@ export default function Checkout() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  // Checkout page - improved
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    if (!user) {
-      alert("You must signup/login first!");
-      setLoading(false);
-      return;
-    }
 
     try {
       const payload = {
@@ -98,32 +91,18 @@ export default function Checkout() {
 
       console.log("✅ Payment initiated:", data.merchantOrderId);
 
-      // Save order ID for status checking
+      // Save order ID
       if (data.merchantOrderId) {
         localStorage.setItem("lastOrderId", data.merchantOrderId);
-
-        // Immediately check if order exists in DB
-        setTimeout(async () => {
-          const statusRes = await fetch(
-            `/api/phonepe/order-status?merchantOrderId=${data.merchantOrderId}`
-          );
-          const statusData = await statusRes.json();
-          console.log("🎯 Order status check:", statusData);
-        }, 1000);
       }
 
-      // PhonePe redirect URL
-      const redirectUrl =
-        data?.phonepeResponse?.data?.redirectUrl ||
-        data?.phonepeResponse?.redirectUrl ||
-        data?.phonepeResponse?.redirect_url;
-
-      if (redirectUrl) {
-        console.log("🔗 Redirecting to PhonePe...");
-        window.location.href = redirectUrl;
+      // ✅ IMPORTANT: PhonePe ka redirect URL use karo
+      if (data.redirectUrl) {
+        console.log("🔗 Redirecting to PhonePe:", data.redirectUrl);
+        window.location.href = data.redirectUrl;
       } else {
-        console.error("❌ No redirect URL received:", data);
-        throw new Error("Payment gateway error - no redirect URL received");
+        console.error("❌ No redirect URL received");
+        throw new Error("Payment gateway error - no redirect URL");
       }
     } catch (err) {
       console.error("💥 Payment error:", err);
@@ -131,7 +110,6 @@ export default function Checkout() {
       setLoading(false);
     }
   };
-
   return (
     <>
       <Navbar />

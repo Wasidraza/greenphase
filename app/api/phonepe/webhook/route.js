@@ -2,9 +2,7 @@
 import Order from "@/models/Order";
 import { connectDB } from "@/lib/mongodb";
 import nodemailer from "nodemailer";
-
-// Temporary storage - create it here since we can't import from another route
-const tempOrders = new Map();
+import { getTempOrder, deleteTempOrder } from "../utils/shared-storage/route";
 
 export async function POST(req) {
   console.log("🔄 PhonePe Webhook Received!");
@@ -44,7 +42,7 @@ export async function POST(req) {
     console.log(`🎯 Payment ${status} for order: ${merchantOrderId}`);
 
     // ✅ IMPORTANT: Temporary storage se data lo
-    const tempOrder = tempOrders.get(merchantOrderId);
+    const tempOrder = getTempOrder(merchantOrderId);
 
     let order;
 
@@ -63,7 +61,7 @@ export async function POST(req) {
       });
 
       // Temporary data delete karo
-      tempOrders.delete(merchantOrderId);
+      deleteTempOrder(merchantOrderId);
       console.log("✅ Order saved in DB after payment confirmation");
     } else {
       // Agar temp data nahi mila, existing order update karo
@@ -104,7 +102,7 @@ export async function POST(req) {
   }
 }
 
-// Email function properly implemented
+// Email function (same as before)
 async function sendEmail(order, status) {
   try {
     if (!order.customer?.email) {
@@ -199,5 +197,3 @@ function getEmailTemplate(order, status) {
 
   return null;
 }
-
-export { tempOrders };
