@@ -26,15 +26,17 @@ export default function OrderSuccessClient() {
         const res = await fetch(
           `/api/phonepe/order-status?merchantOrderId=${merchantOrderId}`
         );
-        if (!res.ok) throw new Error("Network response not ok");
-        const data = await res.json();
 
+        if (!res.ok) throw new Error("Network response not ok");
+
+        const data = await res.json();
         if (!mounted) return;
 
         switch (data.status) {
           case "SUCCESS":
             setStatus("SUCCESS");
             localStorage.removeItem("lastOrderId");
+
             toast.success("Payment successful! 🎉");
 
             if (data.emailStatus === "SENT") {
@@ -52,7 +54,7 @@ export default function OrderSuccessClient() {
 
           case "PENDING":
           default:
-            timerId = setTimeout(checkStatus, 3000); 
+            timerId = setTimeout(checkStatus, 3000);
             break;
         }
       } catch (err) {
@@ -89,7 +91,9 @@ export default function OrderSuccessClient() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-red-50">
         <div className="w-full max-w-md p-6 text-center bg-white shadow-md rounded-xl">
-          <h1 className="mb-4 text-3xl font-bold text-red-600">Payment Failed!</h1>
+          <h1 className="mb-4 text-3xl font-bold text-red-600">
+            Payment Failed!
+          </h1>
           <p className="mb-6 text-gray-700">
             Your payment could not be completed. Please try again.
           </p>
@@ -117,11 +121,17 @@ export default function OrderSuccessClient() {
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5 13l4 4L19 7"
+            />
           </svg>
         </div>
 
-        <h1 className="mb-4 text-3xl font-extrabold text-green-700">Payment Successful!</h1>
+        <h1 className="mb-4 text-3xl font-extrabold text-green-700">
+          Payment Successful!
+        </h1>
 
         <p className="mb-6 text-gray-600">
           Thank you for your purchase. Your order has been confirmed.
