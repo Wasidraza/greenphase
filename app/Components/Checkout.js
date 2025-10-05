@@ -1,3 +1,4 @@
+// app/checkout/page.js
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
@@ -27,34 +28,49 @@ export default function Checkout() {
     pincode: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (!user) {
-      console.warn("Please signup/login first before shopping!");
+      alert("Please signup/login first before shopping!");
+      router.push("/login");
+      return;
     }
 
-    const merchantOrderId = localStorage.getItem("lastOrderId");
-    if (merchantOrderId) {
-      fetch(`/api/phonepe/order-status?merchantOrderId=${merchantOrderId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === "PENDING") {
-            console.warn("Your last payment was not completed. Please try again.");
-          }
-        })
-        .catch((err) => {
-          console.error("Error checking last order status:", err);
-        });
+    // Previous pending order check
+    const lastOrderId = localStorage.getItem("lastOrderId");
+    if (lastOrderId) {
+      checkOrderStatus(lastOrderId);
     }
-  }, [user]);
+  }, [user, router]);
+
+  const checkOrderStatus = async (orderId) => {
+    try {
+      const res = await fetch(
+        `/api/phonepe/order-status?merchantOrderId=${orderId}`
+      );
+      const data = await res.json();
+
+      if (data.status === "PENDING") {
+        console.warn("Your last payment was not completed. Please try again.");
+        localStorage.removeItem("lastOrderId");
+      }
+    } catch (err) {
+      console.error("Error checking last order:", err);
+    }
+  };
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  // Checkout page - improved
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (!user) {
-      console.warn("You must signup/login first!");
+      alert("You must signup/login first!");
+      setLoading(false);
       return;
     }
 
@@ -66,7 +82,7 @@ export default function Checkout() {
         form,
       };
 
-      console.log("📤 Sending payload:", payload);
+      console.log("📤 Creating payment request...");
 
       const res = await fetch("/api/phonepe/create-payment", {
         method: "POST",
@@ -75,29 +91,44 @@ export default function Checkout() {
       });
 
       const data = await res.json();
+
       if (!res.ok) {
-        throw new Error((data && data.error) || "Payment init failed");
+        throw new Error(data.error || "Payment initiation failed");
       }
 
-      // 🔑 Save last orderId
+      console.log("✅ Payment initiated:", data.merchantOrderId);
+
+      // Save order ID for status checking
       if (data.merchantOrderId) {
         localStorage.setItem("lastOrderId", data.merchantOrderId);
+
+        // Immediately check if order exists in DB
+        setTimeout(async () => {
+          const statusRes = await fetch(
+            `/api/phonepe/order-status?merchantOrderId=${data.merchantOrderId}`
+          );
+          const statusData = await statusRes.json();
+          console.log("🎯 Order status check:", statusData);
+        }, 1000);
       }
 
+      // PhonePe redirect URL
       const redirectUrl =
+        data?.phonepeResponse?.data?.redirectUrl ||
         data?.phonepeResponse?.redirectUrl ||
-        data?.phonepeResponse?.redirect_url ||
-        data?.phonepeResponse?.data?.redirect_url;
+        data?.phonepeResponse?.redirect_url;
 
-      if (!redirectUrl) {
-        console.warn("Payment init succeeded but redirect URL missing. Order:", data.merchantOrderId);
-        router.push(`/order-status?merchantOrderId=${data.merchantOrderId}`);
-        return;
+      if (redirectUrl) {
+        console.log("🔗 Redirecting to PhonePe...");
+        window.location.href = redirectUrl;
+      } else {
+        console.error("❌ No redirect URL received:", data);
+        throw new Error("Payment gateway error - no redirect URL received");
       }
-
-      window.location.href = redirectUrl;
     } catch (err) {
-      console.error("pay error", err);
+      console.error("💥 Payment error:", err);
+      alert(`Payment Error: ${err.message}`);
+      setLoading(false);
     }
   };
 
@@ -125,26 +156,37 @@ export default function Checkout() {
           </div>
         </div>
 
-        {/* Customer Details */}
+        {/* Customer Details Form */}
         <form
           onSubmit={handleSubmit}
           className="p-4 space-y-4 bg-white border rounded-lg"
         >
+          {/* Contact Details */}
           <div>
-            <h3 className="mb-2 text-lg font-semibold">Contact</h3>
+            <h3 className="mb-2 text-lg font-semibold">Contact Information</h3>
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="Email"
+              placeholder="Email Address"
               className="w-full p-2 mb-3 border rounded"
+              required
+            />
+            <input
+              type="tel"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              placeholder="Phone Number"
+              className="w-full p-2 border rounded"
               required
             />
           </div>
 
+          {/* Shipping Address */}
           <div>
-            <h3 className="mb-2 text-lg font-semibold">Delivery</h3>
+            <h3 className="mb-2 text-lg font-semibold">Shipping Address</h3>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               <input
                 name="firstName"
@@ -167,7 +209,7 @@ export default function Checkout() {
               name="address"
               value={form.address}
               onChange={handleChange}
-              placeholder="Address"
+              placeholder="Full Address"
               className="w-full p-2 mt-3 border rounded"
               required
             />
@@ -197,22 +239,21 @@ export default function Checkout() {
                 required
               />
             </div>
-            <input
-              type="tel"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              placeholder="Phone"
-              className="w-full p-2 mt-2 border rounded"
-              required
-            />
           </div>
 
+          {/* Pay Now Button */}
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700"
+            disabled={loading}
+            className={`w-full px-4 py-3 text-white rounded font-semibold ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700"
+            }`}
           >
-            Pay Now
+            {loading
+              ? "Processing..."
+              : `Pay ₹${Number(price).toLocaleString("en-IN")}`}
           </button>
         </form>
       </div>
