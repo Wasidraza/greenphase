@@ -38,7 +38,7 @@ const OrderSchema = new mongoose.Schema({
     pincode: String,
   },
   phonepeOrderId: String,
-  paymentDetails: mongoose.Schema.Types.Mixed, 
+  paymentDetails: mongoose.Schema.Types.Mixed,
   errorCode: String,
   emailSent: {
     type: Boolean,
@@ -48,7 +48,6 @@ const OrderSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for faster queries
 OrderSchema.index({ merchantOrderId: 1 });
 OrderSchema.index({ 'customer.email': 1 });
 OrderSchema.index({ status: 1 });

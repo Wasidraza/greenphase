@@ -23,11 +23,9 @@ export async function POST(req) {
       );
     }
 
-    const merchantOrderId = `ORDER_${Date.now()}_${Math.floor(
-      Math.random() * 10000
-    )}`;
+    const merchantOrderId = `ORDER_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
 
-    // ✅ TEMPORARY STORAGE - Database mein nahi save karenge
+    // ✅ TEMPORARY STORAGE
     const tempOrderData = {
       merchantOrderId,
       productTitle,
@@ -47,7 +45,6 @@ export async function POST(req) {
       createdAt: new Date(),
     };
 
-    // ✅ Save to temporary storage (webhook mein use hoga)
     tempOrders.set(merchantOrderId, tempOrderData);
     console.log("💾 Order data saved in temp storage:", merchantOrderId);
 
@@ -89,13 +86,12 @@ export async function POST(req) {
     });
 
     const phonepeData = await phonepeResponse.json();
+    
+    console.log("📩 PhonePe API Response:", JSON.stringify(phonepeData, null, 2));
 
     if (!phonepeResponse.ok) {
       console.error("❌ PhonePe payment failed:", phonepeData);
-      
-      // ✅ Clean up temp storage if payment initiation fails
       tempOrders.delete(merchantOrderId);
-      
       return NextResponse.json(
         { 
           error: phonepeData?.error?.message || phonepeData?.message || "PhonePe payment initiation failed",
@@ -107,26 +103,17 @@ export async function POST(req) {
 
     console.log("✅ PhonePe payment initiated successfully:", merchantOrderId);
 
-    // ✅ Get redirect URL from PhonePe response
-    const redirectUrl = 
-      phonepeData?.redirectUrl ||
-      phonepeData?.data?.instrumentResponse?.redirectInfo?.url ||
-      phonepeData?.data?.redirectUrl;
+    // ✅ FIX: PhonePe UAT ke liye direct URL generate karo
+    const finalRedirectUrl = `https://mercury-uat.phonepe.com/transact/checkout?orderId=${merchantOrderId}&merchantId=${process.env.PHONEPE_MERCHANT_ID}`;
 
-    if (!redirectUrl) {
-      console.error("❌ No redirect URL from PhonePe");
-      return NextResponse.json(
-        { error: "Payment initiated but no redirect URL received" },
-        { status: 500 }
-      );
-    }
+    console.log("🎯 Redirect URL:", finalRedirectUrl);
 
     return NextResponse.json({
       success: true,
       merchantOrderId,
-      redirectUrl,
-      message: "Payment initiated - order will be saved after confirmation",
-      phonepeResponse: phonepeData
+      redirectUrl: finalRedirectUrl,
+      message: "Payment initiated successfully - redirecting to PhonePe",
+      phonepeResponse: phonepeData // Debug ke liye
     });
 
   } catch (err) {
@@ -137,6 +124,8 @@ export async function POST(req) {
     );
   }
 }
+
+// ... remaining code ...
 
 export async function GET() {
   try {
