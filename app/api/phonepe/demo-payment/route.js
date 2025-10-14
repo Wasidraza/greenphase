@@ -1,4 +1,4 @@
-// app/api/phonepe/demo-payment/route.js
+
 import { NextResponse } from "next/server";
 import { tempOrders } from '../create-payment/route';
 
@@ -37,7 +37,7 @@ export async function POST(req) {
     console.log("💾 Demo order saved:", merchantOrderId);
 
     // Direct to success page
-    const redirectUrl = `/order-success?merchantOrderId=${merchantOrderId}&demo=true`;
+    const redirectUrl = `/phonepe/order-success?merchantOrderId=${merchantOrderId}&demo=true`;
 
     return NextResponse.json({
       success: true,

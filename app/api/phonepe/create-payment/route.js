@@ -11,19 +11,27 @@ export async function POST(req) {
     await connectDB();
     const body = await req.json();
 
-    const { amountRupees, productTitle, form, productColor = "Standard", power = "-" } = body;
+    const {
+      amountRupees,
+      productTitle,
+      form,
+      productColor = "Standard",
+      power = "-",
+    } = body;
 
     if (!form) {
       return NextResponse.json({ error: "Form data missing" }, { status: 400 });
     }
     if (!amountRupees || !productTitle) {
       return NextResponse.json(
-        { error: "Amount or product title missing" }, 
+        { error: "Amount or product title missing" },
         { status: 400 }
       );
     }
 
-    const merchantOrderId = `ORDER_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+    const merchantOrderId = `ORDER_${Date.now()}_${Math.floor(
+      Math.random() * 10000
+    )}`;
 
     // ✅ TEMPORARY STORAGE
     const tempOrderData = {
@@ -58,44 +66,55 @@ export async function POST(req) {
         redirectUrl: `${process.env.MERCHANT_REDIRECT_URL}?merchantOrderId=${merchantOrderId}`,
         redirectMode: "GET",
       },
-      callbackUrl: process.env.PHONEPE_CALLBACK_URL, 
+      callbackUrl: process.env.PHONEPE_CALLBACK_URL,
       customer: {
         name: `${form.firstName || ""} ${form.lastName || ""}`.trim(),
         mobile: form.phone || "",
         email: form.email || "",
       },
-      products: [{ 
-        name: productTitle || "Product", 
-        quantity: 1,
-        color: productColor,
-        power: power
-      }],
+      products: [
+        {
+          name: productTitle || "Product",
+          quantity: 1,
+          color: productColor,
+          power: power,
+        },
+      ],
     };
 
     console.log("📦 Payment payload to PhonePe:", payload);
 
     const token = await phonepeFetchToken();
 
-    const phonepeResponse = await fetch(`${process.env.PHONEPE_API_BASE}/checkout/v2/pay`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `O-Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-    });
+    const phonepeResponse = await fetch(
+      `${process.env.PHONEPE_API_BASE}/checkout/v2/pay`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `O-Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
 
     const phonepeData = await phonepeResponse.json();
-    
-    console.log("📩 PhonePe API Response:", JSON.stringify(phonepeData, null, 2));
+
+    console.log(
+      "📩 PhonePe API Response:",
+      JSON.stringify(phonepeData, null, 2)
+    );
 
     if (!phonepeResponse.ok) {
       console.error("❌ PhonePe payment failed:", phonepeData);
       tempOrders.delete(merchantOrderId);
       return NextResponse.json(
-        { 
-          error: phonepeData?.error?.message || phonepeData?.message || "PhonePe payment initiation failed",
-          details: phonepeData 
+        {
+          error:
+            phonepeData?.error?.message ||
+            phonepeData?.message ||
+            "PhonePe payment initiation failed",
+          details: phonepeData,
         },
         { status: phonepeResponse.status || 500 }
       );
@@ -113,15 +132,11 @@ export async function POST(req) {
       merchantOrderId,
       redirectUrl: finalRedirectUrl,
       message: "Payment initiated successfully - redirecting to PhonePe",
-      phonepeResponse: phonepeData // Debug ke liye
+      phonepeResponse: phonepeData, // Debug ke liye
     });
-
   } catch (err) {
     console.error("❌ POST /api/phonepe/create-payment error:", err);
-    return NextResponse.json(
-      { error: err.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
