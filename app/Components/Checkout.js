@@ -88,6 +88,7 @@ export default function Checkout() {
       }
 
       const redirectUrl =
+      data?.redirectUrl ||
         data?.phonepeResponse?.redirectUrl ||
         data?.phonepeResponse?.data?.instrumentResponse?.redirectInfo?.url;
 
