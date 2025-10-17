@@ -101,6 +101,10 @@ export default function Checkout() {
 
       // ✅ PhonePe ke page par redirect karo
       window.location.href = redirectUrl;
+      setTimeout(() => {
+        router.push("/phonepe/order-success");
+      }, 10000);
+      
     } catch (err) {
       console.error("Payment error:", err);
     }
