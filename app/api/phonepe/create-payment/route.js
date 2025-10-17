@@ -122,15 +122,21 @@ export async function POST(req) {
 
     console.log("✅ PhonePe payment initiated successfully:", merchantOrderId);
 
-    // ✅ FIX: PhonePe UAT ke liye direct URL generate karo
-    const finalRedirectUrl = `https://mercury-uat.phonepe.com/transact/checkout?orderId=${merchantOrderId}&merchantId=${process.env.PHONEPE_MERCHANT_ID}`;
+    // ✅ Prefer redirect URL returned by PhonePe instead of hardcoding mercury host
+    const apiRedirectUrl =
+      phonepeData?.redirectUrl ||
+      phonepeData?.data?.instrumentResponse?.redirectInfo?.url ||
+      phonepeData?.data?.url ||
+      null;
 
-    console.log("🎯 Redirect URL:", finalRedirectUrl);
+    if (!apiRedirectUrl) {
+      console.warn("⚠️ PhonePe did not return redirect URL; check API response shape", phonepeData);
+    }
 
     return NextResponse.json({
       success: true,
       merchantOrderId,
-      redirectUrl: finalRedirectUrl,
+      redirectUrl: apiRedirectUrl,
       message: "Payment initiated successfully - redirecting to PhonePe",
       phonepeResponse: phonepeData, // Debug ke liye
     });
