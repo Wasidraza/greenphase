@@ -95,7 +95,8 @@ export default function Checkout() {
 
       if (!redirectUrl) {
         console.error("No redirect URL received");
-        router.push(`/order-status?merchantOrderId=${data.merchantOrderId}`);
+        // router.push(`/order-status?merchantOrderId=${data.merchantOrderId}`);
+        router.push("/phonepe/order-success");
         return;
       }
 
