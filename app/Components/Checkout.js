@@ -54,6 +54,58 @@ export default function Checkout() {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   // handleSubmit function mein ye change karein:
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!user) {
+  //     toast.error("You must signup/login first!");
+  //     return;
+  //   }
+
+  //   try {
+  //     const payload = {
+  //       amountRupees: Number(price),
+  //       productTitle: title,
+  //       productColor: color,
+  //       form,
+  //     };
+
+  //     console.log("📤 Sending payload:", payload);
+
+  //     const res = await fetch("/api/phonepe/create-payment", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(payload),
+  //     });
+
+  //     const data = await res.json();
+
+  //     if (!res.ok) {
+  //       throw new Error(data?.error || "Payment init failed");
+  //     }
+
+  //     // ✅ NEW: Check if payment is successful before redirect
+  //     if (data.merchantOrderId) {
+  //       localStorage.setItem("lastOrderId", data.merchantOrderId);
+  //     }
+
+  //     const redirectUrl =
+  //       data?.phonepeResponse?.redirectUrl ||
+  //       data?.phonepeResponse?.data?.instrumentResponse.redirectInfo.url;
+
+  //     if (!redirectUrl) {
+  //       console.error("No redirect URL received");
+  //       // router.push(`/order-status?merchantOrderId=${data.merchantOrderId}`);
+  //       router.push("/phonepe/order-success");
+  //       return;
+  //     }
+
+  //     window.location.href = redirectUrl;
+  //   } catch (err) {
+  //     console.error("Payment error:", err);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -84,25 +136,27 @@ export default function Checkout() {
         throw new Error(data?.error || "Payment init failed");
       }
 
-      // ✅ NEW: Check if payment is successful before redirect
       if (data.merchantOrderId) {
         localStorage.setItem("lastOrderId", data.merchantOrderId);
       }
 
       const redirectUrl =
         data?.phonepeResponse?.redirectUrl ||
-        data?.phonepeResponse?.data?.instrumentResponse.redirectInfo.url;
+        data?.phonepeResponse?.data?.instrumentResponse?.redirectInfo?.url;
 
       if (!redirectUrl) {
-        console.error("No redirect URL received");
-        // router.push(`/order-status?merchantOrderId=${data.merchantOrderId}`);
-        router.push("/phonepe/order-success");
+        console.error("No redirect URL received from backend");
+
+        router.push(
+          `/phonepe/order-success?merchantOrderId=${data.merchantOrderId}`
+        );
         return;
       }
 
       window.location.href = redirectUrl;
     } catch (err) {
       console.error("Payment error:", err);
+      toast.error("Something went wrong during payment!");
     }
   };
 
